@@ -1,0 +1,29 @@
+﻿using AuthorizationAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AuthorizationAPI.Controllers
+{
+    
+    [ApiController]
+    [Route("api/auth")]
+    [Produces("application/json")]
+    public sealed class AuthController : ControllerBase
+    {
+        public AuthController()
+        {
+                
+        }
+
+        [HttpPost("sign-up", Name = "SignUp")]
+        public async Task<ActionResult<SignUpResultDto>> SignUpAsync(SignUpDto dto)
+        {
+            if (dto.Password != dto.ReEnteredPassword)
+            {
+                return BadRequest("Passwords do not match.");
+            }
+
+            
+            return Ok(  );
+        }
+    }
+}
