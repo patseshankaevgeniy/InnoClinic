@@ -1,4 +1,4 @@
-﻿namespace AuthorizationAPI.Models
+﻿namespace Authorization.Api.Models
 {
     public  sealed class SignUpResultDto
     {

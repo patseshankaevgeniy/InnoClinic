@@ -1,17 +1,16 @@
-﻿using AuthorizationAPI.Models;
+﻿using Authorization.Api.Constants;
+using AuthorizationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationAPI.Controllers
 {
-    
     [ApiController]
-    [Route("api/auth")]
+    [Route(RouteCostants.AuthRoute)]
     [Produces("application/json")]
     public sealed class AuthController : ControllerBase
     {
         public AuthController()
         {
-                
         }
 
         [HttpPost("sign-up", Name = "SignUp")]
@@ -21,7 +20,6 @@ namespace AuthorizationAPI.Controllers
             {
                 return BadRequest("Passwords do not match.");
             }
-
             
             return Ok(  );
         }
