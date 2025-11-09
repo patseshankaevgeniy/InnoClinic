@@ -1,8 +1,8 @@
 ﻿using Authorization.Api.Constants;
-using AuthorizationAPI.Models;
+using Authorization.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AuthorizationAPI.Controllers
+namespace Authorization.Api.Controllers
 {
     [ApiController]
     [Route(RouteCostants.AuthRoute)]
