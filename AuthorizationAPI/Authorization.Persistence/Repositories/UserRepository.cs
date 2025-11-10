@@ -32,7 +32,6 @@ internal class UserRepository : IUserRepository
         return await _users
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == email);
-
     }
 
     public async Task<User> GetAsync(int id)
