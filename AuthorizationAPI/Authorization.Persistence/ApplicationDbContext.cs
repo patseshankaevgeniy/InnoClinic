@@ -1,5 +1,4 @@
-﻿using Authorization.Application.Common.Services.Interfaces;
-using Authorization.Domain.Entities;
+﻿using Authorization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Authorization.Persistence;
