@@ -1,7 +1,6 @@
-﻿namespace Authorization.Api.Constants
+﻿namespace Authorization.Api.Constants;
+
+public static class RouteCostants
 {
-    public static class RouteCostants
-    {
-        public const string AuthRoute = "api/auth";
-    }
+    public const string AuthRoute = "api/auth";
 }
