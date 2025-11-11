@@ -1,9 +1,7 @@
-﻿using Authorization.Application.Models;
-using Authorization.Application.Models.Auth;
+﻿using Authorization.Application.Models.Auth;
 using Authorization.Application.Models.Exceptions;
 using Authorization.Application.Services.Interfaces;
 using Authorization.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 using ValidationException = Authorization.Application.Models.Exceptions.ValidationException;
 
 namespace Authorization.Application.Services;
@@ -38,12 +36,11 @@ public class AuthService : IAuthService
       
         return new SignInResultModel
         {
-            Succeeded = true,
             Token = _tokenService.GenerateToken(new() { UserId = user.Id })
         };
     }
 
-    public async Task<SignUpResultModel> SignUpAsync(SignUpModel signUpModel)
+    public async Task<SignInResultModel> SignUpAsync(SignUpModel signUpModel)
     {
         if (string.IsNullOrEmpty(signUpModel.ReEnteredPassword))
             throw new ValidationException("Password can't be null or empty");
@@ -68,6 +65,13 @@ public class AuthService : IAuthService
         };
 
         await _userRepository.CreateAsync(user);
-        return new SignUpResultModel { Succeeded = true };
+
+        var signInResult = await SignInAsync(new SignInModel
+        {
+            Email = signUpModel.Email,
+            Password = signUpModel.Password
+        });
+
+        return signInResult;
     }
 }
