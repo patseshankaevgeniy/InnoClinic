@@ -1,9 +1,4 @@
 ﻿namespace Authorization.Application.Models.Exceptions;
 
-public class ValidationException : Exception
-{
-    public ValidationException(string message) : base(message)
-    {
 
-    }
-}
+public class ValidationException(string message) : Exception(message);
