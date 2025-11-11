@@ -1,8 +1,10 @@
 ﻿using Authorization.Application.Models;
 using Authorization.Application.Models.Auth;
+using Authorization.Application.Models.Exceptions;
 using Authorization.Application.Services.Interfaces;
 using Authorization.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
+using ValidationException = Authorization.Application.Models.Exceptions.ValidationException;
 
 namespace Authorization.Application.Services;
 
@@ -34,20 +36,12 @@ public class AuthService : IAuthService
         var user = await _userRepository.FindByEmailAsync(signInDto.Email);
         if (user == null)
         {
-            return new SignInResultModel
-            {
-                Succeeded = false,
-                ErrorType = (int)AuthErrorType.UserNotFound
-            };
+           throw new NotFoundException(signInDto.Email, user);
         }
 
         if (user.Password != signInDto.Password)
         {
-            return new SignInResultModel
-            {
-                Succeeded = false,
-                ErrorType = (int)AuthErrorType.WrongPassword
-            };
+            throw new ValidationException("Invalid password");
         }
 
         return new SignInResultModel
@@ -82,11 +76,7 @@ public class AuthService : IAuthService
         var user = await _userRepository.FindByEmailAsync(signUpModel.Email);
         if (user != null)
         {
-            return new SignUpResultModel
-            {
-                Succeeded = false,
-                ErrorType = (int)AuthErrorType.LoginAlreadyExists
-            };
+           throw new BadRequestException("User with this email already exists");
         }
 
         user = new User
