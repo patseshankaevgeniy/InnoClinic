@@ -42,6 +42,10 @@ public sealed class CustomExceptionHandlerMiddleware
                 code = HttpStatusCode.BadRequest;
                 result = JsonConvert.SerializeObject(new ErrorDto { Message = badRequestException.Message });
                 break;
+            case ForbiddenException forbiddenException:
+                code = HttpStatusCode.Forbidden;
+                result = JsonConvert.SerializeObject(new ErrorDto { Message = forbiddenException.Message });
+                break;
             case NotFoundException _:
                 code = HttpStatusCode.NotFound;
                 break;
