@@ -24,26 +24,18 @@ public class AuthService : IAuthService
     public async Task<SignInResultModel> SignInAsync(SignInModel signInDto)
     {
         if (string.IsNullOrEmpty(signInDto.Email))
-        {
             throw new ValidationException("Email can't be null or empty");
-        }
 
         if (string.IsNullOrEmpty(signInDto.Password))
-        {
             throw new ValidationException("Password can't be null or empty");
-        }
 
         var user = await _userRepository.FindByEmailAsync(signInDto.Email);
         if (user == null)
-        {
            throw new NotFoundException(signInDto.Email, user);
-        }
 
         if (user.Password != signInDto.Password)
-        {
             throw new ValidationException("Invalid password");
-        }
-
+      
         return new SignInResultModel
         {
             Succeeded = true,
@@ -54,30 +46,20 @@ public class AuthService : IAuthService
     public async Task<SignUpResultModel> SignUpAsync(SignUpModel signUpModel)
     {
         if (string.IsNullOrEmpty(signUpModel.ReEnteredPassword))
-        {
             throw new ValidationException("Password can't be null or empty");
-        }
 
         if (string.IsNullOrEmpty(signUpModel.Password))
-        {
             throw new ValidationException("Password can't be null or empty");
-        }
 
         if (string.IsNullOrEmpty(signUpModel.Email))
-        {
             throw new ValidationException("Email can't be null or empty");
-        }
 
         if (signUpModel.Password != signUpModel.ReEnteredPassword)
-        {
             throw new ValidationException("Passwords do not match");
-        }
 
         var user = await _userRepository.FindByEmailAsync(signUpModel.Email);
         if (user != null)
-        {
            throw new BadRequestException("User with this email already exists");
-        }
 
         user = new User
         {
