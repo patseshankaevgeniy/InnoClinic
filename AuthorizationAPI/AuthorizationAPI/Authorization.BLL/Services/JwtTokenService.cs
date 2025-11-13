@@ -37,6 +37,4 @@ public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenSe
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-
-
 }
