@@ -13,8 +13,8 @@ public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenSe
     {
         var claims = new[]
         {
-        new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-    };
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+        };
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Auth:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
