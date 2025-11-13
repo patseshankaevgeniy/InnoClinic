@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Aithorization.BLL\Aithorization.BLL.csproj" />
+		<ProjectReference Include="..\Authorization.BLL\Authorization.BLL.csproj" />
 	</ItemGroup>
 
 </Project>
