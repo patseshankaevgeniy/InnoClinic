@@ -8,14 +8,8 @@ namespace Autorization.API.Controllers;
 
 [Route(RouteCostants.AuthRoute)]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(IAuthService _authService) : ControllerBase
 {
-    private readonly IAuthService _authService;
-
-    public AuthController(IAuthService authService)
-    {
-        _authService = authService;
-    }
     [HttpPost(RouteCostants.SignUpRoute)]
     public async Task<ActionResult<AuthResultDto>> SignUpAsync(SignUpDto signUpDto)
     {

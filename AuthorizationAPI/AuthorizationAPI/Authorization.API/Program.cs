@@ -10,7 +10,6 @@ public class Program
 
         // Add services to the container.
         builder.Services.RegisterApplicationLayerDependencies(builder.Configuration);
-
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
@@ -35,8 +34,6 @@ public class Program
         }
 
         // Configure the HTTP request pipeline.
-
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

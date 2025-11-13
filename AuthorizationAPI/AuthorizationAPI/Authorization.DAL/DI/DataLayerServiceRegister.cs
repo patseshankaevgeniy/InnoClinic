@@ -8,8 +8,7 @@ namespace Aithorization.DAL.DI;
 
 public static class DataLayerServiceRegister
 {
-    public static void RegisterDataLayerDependencies(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void RegisterDataLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {

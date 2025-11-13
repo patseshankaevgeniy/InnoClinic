@@ -10,9 +10,7 @@ public static class BusinessLayerServiceRegister
 {
     public static IServiceCollection RegisterBusinessLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-
         services.RegisterDataLayerDependencies(configuration);
-
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
 

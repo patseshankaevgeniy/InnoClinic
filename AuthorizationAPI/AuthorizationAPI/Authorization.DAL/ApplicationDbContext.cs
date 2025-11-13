@@ -1,5 +1,4 @@
 ﻿using Aithorization.DAL.Entities;
-using Aithorization.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aithorization.DAL;
@@ -22,4 +21,3 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }
-

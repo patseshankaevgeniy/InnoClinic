@@ -1,12 +1,12 @@
 ﻿using Aithorization.BLL.Models;
 using Aithorization.BLL.Services.Interfaces;
+using Aithorization.DAL.Entities;
 using Aithorization.DAL.Repositories.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Aithorization.BLL.Services;
 public sealed class AuthService(IUserRepository _userRepository) : IAuthService
 {
-
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(signInModel.Email))
@@ -64,13 +64,14 @@ public sealed class AuthService(IUserRepository _userRepository) : IAuthService
             throw new NotImplementedException();
         }
 
-        var newUser = await _userRepository.CreateAsync(new DAL.Entities.User
+        var newUser = await _userRepository.CreateAsync(new User
         {
+            Id = Guid.NewGuid(),
             Email = signUpModel.Email,
-            Password = signUpModel.Password
+            Password = signUpModel.Password,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
-
-        
 
         return new AuthResultModel
         {

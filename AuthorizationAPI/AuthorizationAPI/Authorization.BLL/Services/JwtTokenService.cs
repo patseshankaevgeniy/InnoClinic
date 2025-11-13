@@ -1,25 +1,14 @@
 ﻿using Aithorization.BLL.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Aithorization.BLL.Services;
 
-public sealed class JwtTokenService : IJwtTokenService
+public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenService
 {
-    private readonly IConfiguration _configuration;
-
-    public JwtTokenService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public string GenerateToken(Guid userId)
     {
         var claims = new[]
