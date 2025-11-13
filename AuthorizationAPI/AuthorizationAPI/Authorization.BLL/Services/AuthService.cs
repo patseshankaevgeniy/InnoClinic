@@ -6,7 +6,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Authorization.BLL.Services;
 
-public sealed class AuthService(IUserRepository userRepository) : IAuthService
+public sealed class AuthService(IUserRepository userRepository,
+    IJwtTokenService jwtTokenService) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
     {
@@ -33,7 +34,7 @@ public sealed class AuthService(IUserRepository userRepository) : IAuthService
 
         return new AuthResultModel
         {
-            AccessToken = "MockedAccess"
+            AccessToken = jwtTokenService.GenerateToken(user.Id)
         };
     }
 
@@ -74,9 +75,12 @@ public sealed class AuthService(IUserRepository userRepository) : IAuthService
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
 
-        return new AuthResultModel
+        var authResultModel = await SignInAsync(new SignInModel
         {
-            AccessToken = "MockedAccess"
-        };
+            Email = signUpModel.Email,
+            Password = signUpModel.Password
+        }, cancellationToken);
+
+        return authResultModel;
     }
 }

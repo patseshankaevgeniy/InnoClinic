@@ -1,6 +1,7 @@
 using Authorization.API.DI;
 using Authorization.DAL;
-using Microsoft.OpenApi.Models;
+
+namespace Authorization.API;
 
 public class Program
 {
@@ -12,15 +13,6 @@ public class Program
         builder.Services.RegisterApplicationLayerDependencies(builder.Configuration);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Version = "v1",
-                Title = "ToDo API",
-                Description = "An ASP.NET Core Web API for managing ToDo items",
-            });
-        });
 
         var app = builder.Build();
 
