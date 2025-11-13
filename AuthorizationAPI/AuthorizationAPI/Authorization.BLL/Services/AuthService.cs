@@ -34,7 +34,8 @@ public sealed class AuthService(IUserRepository userRepository,
 
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user.Id)
+            AccessToken = jwtTokenService.GenerateToken(user.Id),
+            RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
 

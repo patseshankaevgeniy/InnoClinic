@@ -3,4 +3,5 @@
 public interface IJwtTokenService
 {
     string GenerateToken(Guid userId);
+    string GenerateRefreshToken();
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Authorization.BLL.Services;
@@ -28,4 +29,14 @@ public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenSe
         var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         return token;
     }
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
+
 }

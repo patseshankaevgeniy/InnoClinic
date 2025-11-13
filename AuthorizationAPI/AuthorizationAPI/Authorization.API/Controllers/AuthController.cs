@@ -22,7 +22,8 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         var authResultDto = new AuthResultDto
         {
-            AccessToken = result.AccessToken
+            AccessToken = result.AccessToken,
+            RefreshToken = result.RefreshToken
         };
 
         return authResultDto;
@@ -39,7 +40,8 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         var authResultDto = new AuthResultDto
         {
-            AccessToken = result.AccessToken
+            AccessToken = result.AccessToken,
+            RefreshToken = result.RefreshToken
         };
         return authResultDto;
     }

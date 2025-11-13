@@ -34,14 +34,14 @@ public static class ApplicationLayerServiceRegister
            {
                options.TokenValidationParameters = new()
                {
-                   ValidateActor = false,
-                   ValidateIssuer = false,
-                   ValidateAudience = false,
-                   ValidateLifetime = false,
-                   ValidateIssuerSigningKey = false,
+                   ValidateIssuerSigningKey = true,                    
+                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth:Key"])),
+                   ValidateIssuer = true,
                    ValidIssuer = configuration["Auth:Issuer"],
+                   ValidateAudience = true,
                    ValidAudience = configuration["Auth:Issuer"],
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Auth:Key"]))
+                   ValidateLifetime = true, 
+                   ClockSkew = TimeSpan.FromMinutes(2)
                };
            });
 
