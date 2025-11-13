@@ -11,7 +11,7 @@ namespace Autorization.API.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost(RouteCostants.SignUpRoute)]
-    public async Task<ActionResult<AuthResultDto>> SignUpAsync(SignUpDto signUpDto)
+    public async Task<AuthResultDto> SignUpAsync(SignUpDto signUpDto)
     {
         var result = await authService.SignUpAsync(new SignUpModel
         {
@@ -24,11 +24,12 @@ public class AuthController(IAuthService authService) : ControllerBase
         {
             AccessToken = result.AccessToken
         };
-        return Ok(authResultDto);
+
+        return authResultDto;
     }
 
     [HttpPost(RouteCostants.SignInRoute)]
-    public async Task<ActionResult<AuthResultDto>> SignInAsync(SignInDto signInDto)
+    public async Task<AuthResultDto> SignInAsync(SignInDto signInDto)
     {
         var result = await authService.SignInAsync(new SignInModel
         {
@@ -40,6 +41,6 @@ public class AuthController(IAuthService authService) : ControllerBase
         {
             AccessToken = result.AccessToken
         };
-        return Ok(authResultDto);
+        return authResultDto;
     }
 }
