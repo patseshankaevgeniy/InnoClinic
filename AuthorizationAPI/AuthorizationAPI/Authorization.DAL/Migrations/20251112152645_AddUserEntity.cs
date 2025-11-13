@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Aithorization.DAL.Migrations
+namespace Authorization.DAL.Migrations
 {
     /// <inheritdoc />
     public partial class AddUserEntity : Migration

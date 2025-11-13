@@ -1,4 +1,4 @@
-﻿namespace Aithorization.BLL.Models;
+﻿namespace Authorization.BLL.Models;
 
 public sealed class SignUpModel
 {

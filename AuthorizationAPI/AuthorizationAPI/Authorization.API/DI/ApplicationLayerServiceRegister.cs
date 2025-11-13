@@ -1,6 +1,6 @@
-﻿using Aithorization.BLL.DI;
+﻿using Authorization.BLL.DI;
 
-namespace Aithorization.API.DI;
+namespace Authorization.API.DI;
 
 public static class ApplicationLayerServiceRegister
 {

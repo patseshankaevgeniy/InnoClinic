@@ -1,6 +1,6 @@
-﻿using Aithorization.DAL.Entities;
+﻿using Authorization.DAL.Entities;
 
-namespace Aithorization.DAL.Repositories.Interfaces;
+namespace Authorization.DAL.Repositories.Interfaces;
 
 public interface IUserRepository
 {

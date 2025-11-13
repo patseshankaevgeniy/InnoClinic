@@ -1,11 +1,11 @@
-﻿using Aithorization.BLL.Services.Interfaces;
+﻿using Authorization.BLL.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Aithorization.BLL.Services;
+namespace Authorization.BLL.Services;
 
 public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenService
 {

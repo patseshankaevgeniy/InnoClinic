@@ -1,7 +1,7 @@
-﻿using Aithorization.DAL.Entities;
+﻿using Authorization.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aithorization.DAL;
+namespace Authorization.DAL;
 
 public class ApplicationDbContext : DbContext
 {

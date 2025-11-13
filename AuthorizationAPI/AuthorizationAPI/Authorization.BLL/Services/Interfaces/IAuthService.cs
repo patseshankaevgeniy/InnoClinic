@@ -1,6 +1,6 @@
-﻿using Aithorization.BLL.Models;
+﻿using Authorization.BLL.Models;
 
-namespace Aithorization.BLL.Services.Interfaces;
+namespace Authorization.BLL.Services.Interfaces;
 
 public interface IAuthService
 {

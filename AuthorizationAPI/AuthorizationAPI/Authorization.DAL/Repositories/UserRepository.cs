@@ -1,8 +1,8 @@
-﻿using Aithorization.DAL.Entities;
-using Aithorization.DAL.Repositories.Interfaces;
+﻿using Authorization.DAL.Entities;
+using Authorization.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aithorization.DAL.Repositories;
+namespace Authorization.DAL.Repositories;
 
 public class UserRepository(ApplicationDbContext _db) : IUserRepository
 {

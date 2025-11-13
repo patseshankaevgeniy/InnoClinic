@@ -1,6 +1,6 @@
-﻿namespace Aithorization.API.Dtos;
+﻿namespace Authorization.API.Dtos;
 
 public sealed class AuthResultDto
 {
-    public string AccessToken { get; set; } = default!;
+    public required string AccessToken { get; set; }
 }

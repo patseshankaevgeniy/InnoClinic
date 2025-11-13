@@ -1,11 +1,12 @@
-﻿using Aithorization.BLL.Models;
-using Aithorization.BLL.Services.Interfaces;
-using Aithorization.DAL.Entities;
-using Aithorization.DAL.Repositories.Interfaces;
+﻿using Authorization.BLL.Models;
+using Authorization.BLL.Services.Interfaces;
+using Authorization.DAL.Entities;
+using Authorization.DAL.Repositories.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Aithorization.BLL.Services;
-public sealed class AuthService(IUserRepository _userRepository) : IAuthService
+namespace Authorization.BLL.Services;
+
+public sealed class AuthService(IUserRepository userRepository) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
     {
@@ -19,13 +20,13 @@ public sealed class AuthService(IUserRepository _userRepository) : IAuthService
             throw new ValidationException("Password can't be null or empty");
         }
 
-        var user = await _userRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
-        if (user == null)
+        var user = await userRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
+        if (user is null)
         {
             throw new NotImplementedException();
         }
 
-        if (user.Password != signInModel.Password)
+        if (!string.Equals(user.Password, signInModel.Password))
         {
             throw new ValidationException("Invalid password");
         }
@@ -53,18 +54,18 @@ public sealed class AuthService(IUserRepository _userRepository) : IAuthService
             throw new ValidationException("Email can't be null or empty");
         }
 
-        if (signUpModel.Password != signUpModel.ReEnteredPassword)
+        if (!string.Equals(signUpModel.Password, signUpModel.ReEnteredPassword))
         {
             throw new ValidationException("Passwords do not match");
         }
 
-        var user = await _userRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
-        if (user != null)
+        var user = await userRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
+        if (user is not null)
         {
             throw new NotImplementedException();
         }
 
-        var newUser = await _userRepository.CreateAsync(new User
+        var newUser = await userRepository.CreateAsync(new User
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,

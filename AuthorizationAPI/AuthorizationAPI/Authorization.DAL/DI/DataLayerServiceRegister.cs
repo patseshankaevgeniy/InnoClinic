@@ -1,10 +1,10 @@
-﻿using Aithorization.DAL.Repositories;
-using Aithorization.DAL.Repositories.Interfaces;
+﻿using Authorization.DAL.Repositories;
+using Authorization.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Aithorization.DAL.DI;
+namespace Authorization.DAL.DI;
 
 public static class DataLayerServiceRegister
 {

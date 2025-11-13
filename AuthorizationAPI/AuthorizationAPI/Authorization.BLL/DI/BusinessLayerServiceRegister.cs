@@ -1,10 +1,10 @@
-﻿using Aithorization.BLL.Services;
-using Aithorization.BLL.Services.Interfaces;
-using Aithorization.DAL.DI;
+﻿using Authorization.BLL.Services.Interfaces;
+using Authorization.BLL.Services;
+using Authorization.DAL.DI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Aithorization.BLL.DI;
+namespace Authorization.BLL.DI;
 
 public static class BusinessLayerServiceRegister
 {

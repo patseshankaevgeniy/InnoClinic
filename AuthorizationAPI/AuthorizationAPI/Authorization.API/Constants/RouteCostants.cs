@@ -1,4 +1,4 @@
-﻿namespace Aithorization.API.Constants;
+﻿namespace Authorization.API.Constants;
 
 public static class RouteCostants
 {

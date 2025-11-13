@@ -1,4 +1,4 @@
-﻿namespace Aithorization.BLL.Services.Interfaces;
+﻿namespace Authorization.BLL.Services.Interfaces;
 
 public interface IJwtTokenService
 {

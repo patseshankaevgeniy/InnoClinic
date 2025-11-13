@@ -1,4 +1,4 @@
-﻿namespace Aithorization.DAL.Entities;
+﻿namespace Authorization.DAL.Entities;
 
 public abstract class BaseEntity
 {

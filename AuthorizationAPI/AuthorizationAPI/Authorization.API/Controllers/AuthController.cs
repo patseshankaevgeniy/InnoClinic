@@ -1,19 +1,19 @@
-﻿using Aithorization.API.Constants;
-using Aithorization.API.Dtos;
-using Aithorization.BLL.Models;
-using Aithorization.BLL.Services.Interfaces;
+﻿using Authorization.API.Dtos;
+using Authorization.BLL.Models;
+using Authorization.API.Constants;
+using Authorization.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autorization.API.Controllers;
 
 [Route(RouteCostants.AuthRoute)]
 [ApiController]
-public class AuthController(IAuthService _authService) : ControllerBase
+public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost(RouteCostants.SignUpRoute)]
     public async Task<ActionResult<AuthResultDto>> SignUpAsync(SignUpDto signUpDto)
     {
-        var result = await _authService.SignUpAsync(new SignUpModel
+        var result = await authService.SignUpAsync(new SignUpModel
         {
             Email = signUpDto.Email,
             ReEnteredPassword = signUpDto.ReEnteredPassword,
@@ -30,7 +30,7 @@ public class AuthController(IAuthService _authService) : ControllerBase
     [HttpPost(RouteCostants.SignInRoute)]
     public async Task<ActionResult<AuthResultDto>> SignInAsync(SignInDto signInDto)
     {
-        var result = await _authService.SignInAsync(new SignInModel
+        var result = await authService.SignInAsync(new SignInModel
         {
             Email = signInDto.Email,
             Password = signInDto.Password

@@ -1,5 +1,5 @@
-using Aithorization.API.DI;
-using Aithorization.DAL;
+using Authorization.API.DI;
+using Authorization.DAL;
 using Microsoft.OpenApi.Models;
 
 public class Program
