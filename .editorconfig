@@ -1,3 +1,5 @@
 root = true
 
 dotnet_diagnostic.S6781.severity = none
+
+dotnet_diagnostic.S4488.severity = none
