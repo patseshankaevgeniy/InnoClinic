@@ -35,11 +35,11 @@ public static class ApplicationLayerServiceRegister
                options.TokenValidationParameters = new()
                {
                    ValidateIssuerSigningKey = true,                    
-                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth_Key"])),
+                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth_Key"]!)),
                    ValidateIssuer = true,
-                   ValidIssuer = configuration["Auth_Issuer"],
+                   ValidIssuer = configuration["Auth:Issuer"],
                    ValidateAudience = true,
-                   ValidAudience = configuration["Auth_Issuer"],
+                   ValidAudience = configuration["Auth:Issuer"],
                    ValidateLifetime = true, 
                    ClockSkew = TimeSpan.FromMinutes(2)
                };

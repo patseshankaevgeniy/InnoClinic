@@ -20,8 +20,8 @@ public sealed class JwtTokenService(IConfiguration configuration) : IJwtTokenSer
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Auth_Key"]!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var tokenDescriptor = new JwtSecurityToken(
-            issuer: configuration["Auth_Issuer"],
-            audience: configuration["Auth_Issuer"],
+            issuer: configuration["Auth:Issuer"],
+            audience: configuration["Auth:Issuer"],
             claims,
             expires: DateTime.Now.AddMinutes(10),
             signingCredentials: credentials);
