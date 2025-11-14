@@ -4,41 +4,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Authorization.DAL.Repositories;
 
-public class UserRepository(ApplicationDbContext _db) : IUserRepository
+public class UserRepository(ApplicationDbContext db) : IUserRepository
 {
     public async Task<User> CreateAsync(User newUser, CancellationToken cancellationToken = default)
     {
-        _db.Users.Add(newUser);
-        await _db.SaveChangesAsync();
+        db.Users.Add(newUser);
+        await db.SaveChangesAsync();
         return newUser;
     }
 
     public async Task DeleteAsync(User user, CancellationToken cancellationToken = default)
     {
-        _db.Users.Remove(user);
-        await _db.SaveChangesAsync();
+        db.Users.Remove(user);
+        await db.SaveChangesAsync();
     }
 
-    public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        var user = await _db.Users
+        return await db.Users
         .FirstOrDefaultAsync(x => x.Email == email);
-
-        return user;
     }
 
-    public async Task<User> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<User?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var user = await _db.Users
+        return await db.Users
         .FirstOrDefaultAsync(x => x.Id == id);
-
-        return user;
     }
 
     public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
-        _db.Users.Update(user);
-        await _db.SaveChangesAsync();
+        db.Users.Update(user);
+        await db.SaveChangesAsync();
 
         return user;
     }
