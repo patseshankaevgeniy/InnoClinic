@@ -1,0 +1,3 @@
+root = true
+
+dotnet_diagnostic.S6781.severity = none
