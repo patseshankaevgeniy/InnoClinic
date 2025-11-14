@@ -21,14 +21,18 @@ public class UserRepository(ApplicationDbContext _db) : IUserRepository
 
     public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await _db.Users
+        var user = await _db.Users
         .FirstOrDefaultAsync(x => x.Email == email);
+
+        return user;
     }
 
     public async Task<User> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _db.Users
-       .FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _db.Users
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+        return user;
     }
 
     public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)

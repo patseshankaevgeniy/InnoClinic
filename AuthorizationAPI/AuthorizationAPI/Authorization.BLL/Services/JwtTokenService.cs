@@ -17,7 +17,12 @@ public sealed class JwtTokenService(IConfiguration configuration) : IJwtTokenSer
             new Claim(ClaimTypes.NameIdentifier, userId.ToString())
         };
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Auth_Key"]));
+        var authenticationKey = configuration["Auth_Key"];
+        if (string.IsNullOrEmpty(authenticationKey))
+        {
+            throw new InvalidOperationException("Authentication key is not configured.");
+        }
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var tokenDescriptor = new JwtSecurityToken(
             issuer: configuration["Auth_Issuer"],
