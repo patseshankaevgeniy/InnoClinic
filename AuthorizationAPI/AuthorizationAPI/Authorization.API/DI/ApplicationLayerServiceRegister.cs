@@ -18,8 +18,8 @@ public static class ApplicationLayerServiceRegister
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "ToDo API",
-                Description = "An ASP.NET Core Web API for managing ToDo items",
+                Title = "Authorization API",
+                Description = "An ASP.NET Core Web API",
             });
         });
 
@@ -35,7 +35,7 @@ public static class ApplicationLayerServiceRegister
                options.TokenValidationParameters = new()
                {
                    ValidateIssuerSigningKey = true,                    
-                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth:Key"])),
+                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth:Key"]!)),
                    ValidateIssuer = true,
                    ValidIssuer = configuration["Auth:Issuer"],
                    ValidateAudience = true,

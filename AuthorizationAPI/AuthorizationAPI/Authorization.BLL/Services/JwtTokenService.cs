@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Authorization.BLL.Services;
 
-public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenService
+public sealed class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {
     public string GenerateToken(Guid userId)
     {
@@ -17,11 +17,11 @@ public sealed class JwtTokenService(IConfiguration _configuration) : IJwtTokenSe
             new Claim(ClaimTypes.NameIdentifier, userId.ToString())
         };
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Auth:Key"]));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Auth:Key"]!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var tokenDescriptor = new JwtSecurityToken(
-            issuer: _configuration["Auth:Issuer"],
-            audience: _configuration["Auth:Issuer"],
+            issuer: configuration["Auth:Issuer"],
+            audience: configuration["Auth:Issuer"],
             claims,
             expires: DateTime.Now.AddMinutes(10),
             signingCredentials: credentials);
