@@ -4,6 +4,6 @@ namespace Authorization.BLL.Services.Interfaces;
 
 public interface IJwtTokenService
 {
-    string GenerateToken(User user);
+    string GenerateToken(Identity user, string role);
     string GenerateRefreshToken();
 }

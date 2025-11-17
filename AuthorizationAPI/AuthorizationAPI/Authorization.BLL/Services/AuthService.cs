@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Authorization.BLL.Services;
 
-public sealed class AuthService(IUserRepository userRepository,
+public sealed class AuthService(IIdentityRepository identityRepository,
     IJwtTokenService jwtTokenService) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
@@ -21,7 +21,7 @@ public sealed class AuthService(IUserRepository userRepository,
             throw new ValidationException("Password can't be null or empty");
         }
 
-        var user = await userRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
+        var user = await identityRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
         if (user is null)
         {
             throw new NotImplementedException();
@@ -32,9 +32,16 @@ public sealed class AuthService(IUserRepository userRepository,
             throw new ValidationException("Invalid password");
         }
 
+        string role = user switch
+        {
+            Worker => "Worker",
+            Patient => "Patient",
+            _ => "User"
+        };
+
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user),
+            AccessToken = jwtTokenService.GenerateToken(user, role),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
@@ -61,27 +68,26 @@ public sealed class AuthService(IUserRepository userRepository,
             throw new ValidationException("Passwords do not match");
         }
 
-        var user = await userRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
+        var user = await identityRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
         if (user is not null)
         {
-            throw new ValidationException("Not found user with this email");
+            throw new ValidationException("A user with this email address already exists.");
         }
 
-        var newUser = await userRepository.CreateAsync(new User
+        var newPatient = await identityRepository.CreatePatientAsync(new Patient
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
             Password = signUpModel.Password,
-            UserName = signUpModel.Email,
-            Role = UserRole.User,
+            Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
 
         var authResultModel = await SignInAsync(new SignInModel
         {
-            Email = signUpModel.Email,
-            Password = signUpModel.Password
+            Email = newPatient.Email,
+            Password = newPatient.Password
         }, cancellationToken);
 
         return authResultModel;
