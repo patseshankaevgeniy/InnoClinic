@@ -17,31 +17,9 @@ public static class ApplicationLayerServiceRegister
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Authorization Api",
-                Version = "v1"
-            });
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-            {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-            });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                 {
-                    new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                 }
+                Version = "v1",
+                Title = "Authorization API",
+                Description = "An ASP.NET Core Web API",
             });
         });
 
@@ -56,8 +34,8 @@ public static class ApplicationLayerServiceRegister
            {
                options.TokenValidationParameters = new()
                {
-                   ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth_Key"]!)),
+                   ValidateIssuerSigningKey = true,                    
+                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth:Key"]!)),
                    ValidateIssuer = true,
                    ValidIssuer = configuration["Auth:Issuer"],
                    ValidateAudience = true,
