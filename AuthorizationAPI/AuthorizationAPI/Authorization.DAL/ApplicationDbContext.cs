@@ -1,5 +1,6 @@
 ﻿using Authorization.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Authorization.DAL;
 
@@ -19,5 +20,8 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.Entity<User>()
+            .Property(e => e.Role)
+            .HasConversion(new EnumToStringConverter<UserRole>());
     }
 }

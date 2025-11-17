@@ -1,15 +1,18 @@
-﻿using Authorization.API.Dtos;
+﻿using Authorization.API.Constants;
+using Authorization.API.Dtos;
 using Authorization.BLL.Models;
-using Authorization.API.Constants;
 using Authorization.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autorization.API.Controllers;
 
+[Authorize]
 [Route(RouteCostants.AuthRoute)]
 [ApiController]
 public class AuthController(IAuthService authService) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost(RouteCostants.SignUpRoute)]
     public async Task<AuthResultDto> SignUpAsync(SignUpDto signUpDto)
     {
@@ -29,6 +32,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return authResultDto;
     }
 
+    [AllowAnonymous]
     [HttpPost(RouteCostants.SignInRoute)]
     public async Task<AuthResultDto> SignInAsync(SignInDto signInDto)
     {

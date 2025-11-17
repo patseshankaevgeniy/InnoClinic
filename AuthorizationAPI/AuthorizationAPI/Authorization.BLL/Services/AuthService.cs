@@ -34,7 +34,7 @@ public sealed class AuthService(IUserRepository userRepository,
 
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user.Id),
+            AccessToken = jwtTokenService.GenerateToken(user),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
@@ -64,7 +64,7 @@ public sealed class AuthService(IUserRepository userRepository,
         var user = await userRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
         if (user is not null)
         {
-            throw new NotImplementedException();
+            throw new ValidationException("Not found user with this email");
         }
 
         var newUser = await userRepository.CreateAsync(new User
@@ -72,6 +72,8 @@ public sealed class AuthService(IUserRepository userRepository,
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
             Password = signUpModel.Password,
+            UserName = signUpModel.Email,
+            Role = UserRole.User,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
