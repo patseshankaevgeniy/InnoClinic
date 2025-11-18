@@ -32,16 +32,9 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             throw new ValidationException("Invalid password");
         }
 
-        string role = user switch
-        {
-            Worker => "Worker",
-            Patient => "Patient",
-            _ => "User"
-        };
-
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user, role),
+            AccessToken = jwtTokenService.GenerateToken(user, user.Role.ToString()),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
@@ -74,11 +67,13 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             throw new ValidationException("A user with this email address already exists.");
         }
 
-        var newPatient = await identityRepository.CreatePatientAsync(new Patient
+        var newPatient = await identityRepository.CreateAsync(new Patient
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
             Password = signUpModel.Password,
+            FirstName = "user",
+            LastName = "user",
             Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

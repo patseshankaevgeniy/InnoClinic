@@ -2,7 +2,7 @@
 
 public enum UserRole
 {
-    Admin,
-    User,
-    Worker
+    Admin = 0,
+    Patient = 1,
+    Worker = 2
 }

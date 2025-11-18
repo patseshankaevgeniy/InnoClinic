@@ -6,19 +6,9 @@ namespace Authorization.DAL.Repositories;
 
 public class IdentityRepository(ApplicationDbContext db) : IIdentityRepository
 {
-    public async Task<Identity> CreateIdentityAsync(Identity newUser, CancellationToken cancellationToken = default)
+    public async Task<Identity> CreateAsync(Identity newUser, CancellationToken cancellationToken = default)
     {
-        switch (newUser)
-        {
-            case Worker worker:
-                db.Workers.Add(worker);
-                break;
-            case Patient patient:
-                db.Patients.Add(patient);
-                break;
-            default:
-                throw new ArgumentException("Неизвестный тип пользователя", nameof(newUser));
-        }
+        await db.Identities.AddAsync(newUser);
         await db.SaveChangesAsync(cancellationToken);
         return newUser;
     }
@@ -33,5 +23,10 @@ public class IdentityRepository(ApplicationDbContext db) : IIdentityRepository
     {
         return await db.Identities
        .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public Task<Identity> UpdateAsync(Identity newUser, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

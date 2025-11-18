@@ -57,7 +57,7 @@ public static class ApplicationLayerServiceRegister
                options.TokenValidationParameters = new()
                {
                    ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth_Key"]!)),
+                   IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(configuration["Auth:Key"]!)),
                    ValidateIssuer = true,
                    ValidIssuer = configuration["Auth:Issuer"],
                    ValidateAudience = true,
