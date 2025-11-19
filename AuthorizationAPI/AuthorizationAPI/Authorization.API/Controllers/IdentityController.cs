@@ -1,7 +1,6 @@
 ﻿using Authorization.API.Constants;
 using Authorization.API.Dtos;
 using Authorization.BLL.Models;
-using Authorization.BLL.Services;
 using Authorization.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +8,10 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Authorization.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route(RouteCostants.IdentityRoute)]
-[Authorize]
-public class IdentityController(IdentityService identityService) : ControllerBase
+public class IdentityController(IIdentityService identityService) : ControllerBase
 {
     [HttpPost(RouteCostants.CreateIdentityRoute)]
     [Authorize(Roles = "Admin")]
@@ -21,7 +20,7 @@ public class IdentityController(IdentityService identityService) : ControllerBas
     [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status403Forbidden, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<ActionResult<IdentityDto>> CreateIdentityAsync(IdentityDto newIdentityDto)
+    public async Task<IdentityDto> CreateIdentityAsync(IdentityDto newIdentityDto)
     {
         var identityModel = await identityService.CreateAsync(new IdentityModel
         {
@@ -47,7 +46,7 @@ public class IdentityController(IdentityService identityService) : ControllerBas
     [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status404NotFound, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<ActionResult<IdentityDto>> GetUserAsync(Guid id)
+    public async Task<IdentityDto> GetUserAsync(Guid id)
     {
         var identityModel = await identityService.GetAsync(id);
 
@@ -67,7 +66,7 @@ public class IdentityController(IdentityService identityService) : ControllerBas
     [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status404NotFound, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<ActionResult<IdentityDto>> UpdateUserAsync(IdentityDto updatedIdentityDto)
+    public async Task<IdentityDto> UpdateUserAsync(IdentityDto updatedIdentityDto)
     {
         var identityModel = await identityService.UpdateAsync(new IdentityModel
         {
@@ -92,6 +91,7 @@ public class IdentityController(IdentityService identityService) : ControllerBas
     [HttpDelete(RouteCostants.DeleteIdentityRoute)]
     [ProducesResponseType(Status204NoContent)]
     [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
+    [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
     public async Task<ActionResult> DeleteAsync(Guid id)
     {

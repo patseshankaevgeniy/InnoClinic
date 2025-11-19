@@ -1,4 +1,5 @@
-﻿using Authorization.BLL.Models;
+﻿using Authorization.BLL.Constants;
+using Authorization.BLL.Models;
 using Authorization.BLL.Services.Interfaces;
 using Authorization.DAL.Entities;
 using Authorization.DAL.Repositories.Interfaces;
@@ -13,23 +14,23 @@ public sealed class AuthService(IIdentityRepository identityRepository,
     {
         if (string.IsNullOrEmpty(signInModel.Email))
         {
-            throw new ValidationException("Email can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongEmail);
         }
 
         if (string.IsNullOrEmpty(signInModel.Password))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
         var user = await identityRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
         if (user is null)
         {
-            throw new NotImplementedException();
+            throw new ValidationException(ExceptionConstants.NoUser);
         }
 
         if (!string.Equals(user.HashPassword, signInModel.Password))
         {
-            throw new ValidationException("Invalid password");
+            throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
         return new AuthResultModel
@@ -48,28 +49,28 @@ public sealed class AuthService(IIdentityRepository identityRepository,
     {
         if (string.IsNullOrEmpty(signUpModel.ReEnteredPassword))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
         if (string.IsNullOrEmpty(signUpModel.Password))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
         if (string.IsNullOrEmpty(signUpModel.Email))
         {
-            throw new ValidationException("Email can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongEmail);
         }
 
         if (!string.Equals(signUpModel.Password, signUpModel.ReEnteredPassword))
         {
-            throw new ValidationException("Passwords do not match");
+            throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
         var user = await identityRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
         if (user is not null)
         {
-            throw new ValidationException("A user with this email address already exists.");
+            throw new ValidationException(ExceptionConstants.UserExists);
         }
 
         var newUser = await identityRepository.CreateAsync(new Identity
@@ -77,6 +78,8 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
             HashPassword = signUpModel.Password,
+            FirstName = DefaultUserConstants.DefaultFirstName,
+            LastName = DefaultUserConstants.DefaultLastName,
             Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

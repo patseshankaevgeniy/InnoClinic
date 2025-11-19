@@ -2,6 +2,7 @@
 using Authorization.API.Dtos;
 using Authorization.BLL.Models;
 using Authorization.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 

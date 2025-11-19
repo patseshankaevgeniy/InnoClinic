@@ -2,7 +2,6 @@
 
 public static class ExceptionConstants
 {
-    public const string IncorrectPassword = "Passwords do not match";
     public const string WrongPassword = "Password can't be null or empty";
     public const string UserExists = "The user already exists.";
     public const string NoUser = "Can't find user";
