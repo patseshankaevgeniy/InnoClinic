@@ -22,20 +22,20 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
-        var user = await identityRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
-        if (user is null)
+        var identity = await identityRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
+        if (identity is null)
         {
             throw new ValidationException(ExceptionConstants.NoUser);
         }
 
-        if (!string.Equals(user.HashPassword, signInModel.Password))
+        if (!string.Equals(identity.HashPassword, signInModel.Password))
         {
             throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user),
+            AccessToken = jwtTokenService.GenerateToken(identity),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
@@ -67,13 +67,13 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
-        var user = await identityRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
-        if (user is not null)
+        var identity = await identityRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
+        if (identity is not null)
         {
             throw new ValidationException(ExceptionConstants.UserExists);
         }
 
-        var newUser = await identityRepository.CreateAsync(new Identity
+        var newIdentity = await identityRepository.CreateAsync(new Identity
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
@@ -87,8 +87,8 @@ public sealed class AuthService(IIdentityRepository identityRepository,
 
         var authResultModel = await SignInAsync(new SignInModel
         {
-            Email = newUser.Email,
-            Password = newUser.HashPassword
+            Email = newIdentity.Email,
+            Password = newIdentity.HashPassword
         }, cancellationToken);
 
         return authResultModel;

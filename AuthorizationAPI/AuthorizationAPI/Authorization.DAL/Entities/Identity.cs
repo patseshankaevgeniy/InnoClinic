@@ -3,10 +3,10 @@
 public class Identity
 {
     public Guid Id { get; set; }
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Email { get; set; } = default!;
-    public string HashPassword { get; set; } = default!;
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string Email { get; set; }
+    public required string HashPassword { get; set; }
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

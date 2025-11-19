@@ -81,9 +81,10 @@ namespace Authorization.BLL.Services
 
         public async Task<IdentityModel> UpdateAsync(IdentityModel updatedIdentityModel, CancellationToken cancellationToken = default)
         {
-            var updatedIdentity = await identityRepository.UpdateAsync(new Identity
+            var updatedIdentity = await identityRepository.GetByEmailAsync(updatedIdentityModel.Email, cancellationToken);
+
+            updatedIdentity = await identityRepository.UpdateAsync(new Identity
             {
-                Id = updatedIdentityModel.Id,
                 Email = updatedIdentityModel.Email,
                 FirstName = updatedIdentityModel.FirstName,
                 LastName = updatedIdentityModel.LastName,
