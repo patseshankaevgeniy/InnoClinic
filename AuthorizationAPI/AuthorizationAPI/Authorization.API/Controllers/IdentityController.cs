@@ -10,7 +10,7 @@ namespace Authorization.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route(RouteCostants.IdentityRoute)]
+[Route(RouteCostants.IdentityControllerRoute)]
 public class IdentityController(IIdentityService identityService) : ControllerBase
 {
     [HttpPost(RouteCostants.CreateIdentityRoute)]
@@ -42,7 +42,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     }
 
     [HttpGet(RouteCostants.GetIdentityRoute)]
-    [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<IdentityDto>))]
+    [ProducesResponseType(Status200OK, Type = typeof(IdentityDto))]
     [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status404NotFound, Type = typeof(ErrorDto))]
     [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
