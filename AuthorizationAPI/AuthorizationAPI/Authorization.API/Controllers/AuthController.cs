@@ -7,8 +7,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Autorization.API.Controllers;
 
-[Route(RouteCostants.AuthRoute)]
 [ApiController]
+[Route(RouteCostants.AuthRoute)]
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost(RouteCostants.SignUpRoute)]

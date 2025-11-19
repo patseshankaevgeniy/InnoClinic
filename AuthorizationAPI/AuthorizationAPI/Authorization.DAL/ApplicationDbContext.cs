@@ -6,7 +6,7 @@ namespace Authorization.DAL;
 
 public class ApplicationDbContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<Identity> Identities { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -20,7 +20,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<Identity>()
             .Property(e => e.Role)
             .HasConversion(new EnumToStringConverter<UserRole>());
     }

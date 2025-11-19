@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Authorization.BLL.Services;
 
-public sealed class AuthService(IUserRepository identityRepository,
+public sealed class AuthService(IIdentityRepository identityRepository,
     IJwtTokenService jwtTokenService) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
@@ -27,7 +27,7 @@ public sealed class AuthService(IUserRepository identityRepository,
             throw new NotImplementedException();
         }
 
-        if (!string.Equals(user.Password, signInModel.Password))
+        if (!string.Equals(user.HashPassword, signInModel.Password))
         {
             throw new ValidationException("Invalid password");
         }
@@ -72,11 +72,11 @@ public sealed class AuthService(IUserRepository identityRepository,
             throw new ValidationException("A user with this email address already exists.");
         }
 
-        var newUser = await identityRepository.CreateAsync(new User
+        var newUser = await identityRepository.CreateAsync(new Identity
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
-            Password = signUpModel.Password,
+            HashPassword = signUpModel.Password,
             Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -85,7 +85,7 @@ public sealed class AuthService(IUserRepository identityRepository,
         var authResultModel = await SignInAsync(new SignInModel
         {
             Email = newUser.Email,
-            Password = newUser.Password
+            Password = newUser.HashPassword
         }, cancellationToken);
 
         return authResultModel;

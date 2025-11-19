@@ -11,7 +11,7 @@ namespace Authorization.BLL.Services;
 
 public sealed class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {
-    public string GenerateToken(User user)
+    public string GenerateToken(Identity user)
     {
         var claims = new[]
         {

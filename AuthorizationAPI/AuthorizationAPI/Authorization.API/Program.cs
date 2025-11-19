@@ -1,4 +1,5 @@
 using Authorization.API.DI;
+using Authorization.API.Middlewares;
 using Authorization.DAL;
 
 namespace Authorization.API;
@@ -37,6 +38,7 @@ public class Program
         }
 
         app.UseHttpsRedirection()
+           .UseMiddleware<CustomExceptionHandlerMiddleware>()
            .UseCors()
            .UseRouting()
            .UseAuthentication()
