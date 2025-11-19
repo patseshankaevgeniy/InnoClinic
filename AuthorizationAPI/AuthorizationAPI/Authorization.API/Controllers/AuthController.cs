@@ -2,8 +2,8 @@
 using Authorization.API.Dtos;
 using Authorization.BLL.Models;
 using Authorization.BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Autorization.API.Controllers;
 
@@ -12,13 +12,16 @@ namespace Autorization.API.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost(RouteCostants.SignUpRoute)]
+    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
+    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
+    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
     public async Task<AuthResultDto> SignUpAsync(SignUpDto signUpDto)
     {
         var result = await authService.SignUpAsync(new SignUpModel
         {
             Email = signUpDto.Email,
-            ReEnteredPassword = signUpDto.ReEnteredPassword,
-            Password = signUpDto.Password
+            Password = signUpDto.Password,
+            ReEnteredPassword = signUpDto.ReEnteredPassword
         });
 
         var authResultDto = new AuthResultDto
@@ -31,6 +34,9 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpPost(RouteCostants.SignInRoute)]
+    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
+    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
+    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
     public async Task<AuthResultDto> SignInAsync(SignInDto signInDto)
     {
         var result = await authService.SignInAsync(new SignInModel
@@ -45,5 +51,16 @@ public class AuthController(IAuthService authService) : ControllerBase
             RefreshToken = result.RefreshToken
         };
         return authResultDto;
+    }
+
+    [HttpPost]
+    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
+    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
+    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
+    public async Task<ActionResult> SignOutAsync()
+    {
+        var result = await authService.SignOutAsync();
+
+        return Ok(result);
     }
 }

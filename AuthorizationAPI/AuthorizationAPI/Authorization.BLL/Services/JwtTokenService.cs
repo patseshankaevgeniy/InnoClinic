@@ -11,11 +11,11 @@ namespace Authorization.BLL.Services;
 
 public sealed class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {
-    public string GenerateToken(Identity user, string role)
+    public string GenerateToken(User user)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Role, role.ToString()),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 

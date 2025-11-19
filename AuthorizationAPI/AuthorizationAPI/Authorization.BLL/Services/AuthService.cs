@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Authorization.BLL.Services;
 
-public sealed class AuthService(IIdentityRepository identityRepository,
+public sealed class AuthService(IUserRepository identityRepository,
     IJwtTokenService jwtTokenService) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
@@ -34,9 +34,14 @@ public sealed class AuthService(IIdentityRepository identityRepository,
 
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user, user.Role.ToString()),
+            AccessToken = jwtTokenService.GenerateToken(user),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
+    }
+
+    public Task<AuthResultModel> SignOutAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<AuthResultModel> SignUpAsync(SignUpModel signUpModel, CancellationToken cancellationToken = default)
@@ -67,13 +72,11 @@ public sealed class AuthService(IIdentityRepository identityRepository,
             throw new ValidationException("A user with this email address already exists.");
         }
 
-        var newPatient = await identityRepository.CreateAsync(new Patient
+        var newUser = await identityRepository.CreateAsync(new User
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
             Password = signUpModel.Password,
-            FirstName = "user",
-            LastName = "user",
             Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -81,8 +84,8 @@ public sealed class AuthService(IIdentityRepository identityRepository,
 
         var authResultModel = await SignInAsync(new SignInModel
         {
-            Email = newPatient.Email,
-            Password = newPatient.Password
+            Email = newUser.Email,
+            Password = newUser.Password
         }, cancellationToken);
 
         return authResultModel;
