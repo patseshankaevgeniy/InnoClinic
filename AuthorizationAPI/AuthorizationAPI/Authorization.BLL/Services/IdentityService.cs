@@ -43,7 +43,7 @@ namespace Authorization.BLL.Services
             var deletedIdentity = await identityRepository.GetAsync(id);
             if (deletedIdentity is null)
             {
-                throw new NotFoundException($"Can't find product with id: {id}");
+                throw new NotFoundException("Can't find user");
             }
 
             await identityRepository.DeleteAsync(deletedIdentity, cancellationToken);
