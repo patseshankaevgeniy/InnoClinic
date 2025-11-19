@@ -1,104 +1,104 @@
 ﻿using Authorization.BLL.Common.Models.Exceptions;
+using Authorization.BLL.Constants;
 using Authorization.BLL.Models;
 using Authorization.BLL.Services.Interfaces;
 using Authorization.DAL.Entities;
 using Authorization.DAL.Repositories.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Authorization.BLL.Services
+namespace Authorization.BLL.Services;
+
+public sealed class IdentityService(IIdentityRepository identityRepository) : IIdentityService
 {
-    public sealed class IdentityService(IIdentityRepository identityRepository) : IIdentityService
+    public async Task<IdentityModel> CreateAsync(IdentityModel newIdentityModel, CancellationToken cancellationToken = default)
     {
-        public async Task<IdentityModel> CreateAsync(IdentityModel newIdentityModel, CancellationToken cancellationToken = default)
+        var chekedIdentity = await identityRepository.GetByEmailAsync(newIdentityModel.Email);
+        if (chekedIdentity is not null)
         {
-            var chekedIdentity = await identityRepository.GetByEmailAsync(newIdentityModel.Email);
-            if (chekedIdentity is not null)
-            {
-                throw new ValidationException("A user with this email address already exists.");
-            }
-
-            var newIdentity = await identityRepository.CreateAsync(new Identity
-            {
-                Id = Guid.NewGuid(),
-                Email = newIdentityModel.Email,
-                HashPassword = newIdentityModel.HashPassword,
-                Role = newIdentityModel.Role,
-                FirstName = newIdentityModel.FirstName,
-                LastName = newIdentityModel.LastName,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            newIdentityModel.Email = newIdentity.Email;
-            newIdentityModel.HashPassword = newIdentity.HashPassword;
-            newIdentityModel.Role = newIdentityModel.Role;
-            newIdentityModel.FirstName = newIdentityModel.FirstName;
-            newIdentityModel.LastName = newIdentityModel.LastName;
-
-            return newIdentityModel;
+            throw new ValidationException(ExceptionConstants.UserExists);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        var newIdentity = await identityRepository.CreateAsync(new Identity
         {
-            var deletedIdentity = await identityRepository.GetAsync(id);
-            if (deletedIdentity is null)
-            {
-                throw new NotFoundException("Can't find user");
-            }
+            Id = Guid.NewGuid(),
+            Email = newIdentityModel.Email,
+            HashPassword = newIdentityModel.HashPassword,
+            Role = newIdentityModel.Role,
+            FirstName = newIdentityModel.FirstName,
+            LastName = newIdentityModel.LastName,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        });
 
-            await identityRepository.DeleteAsync(deletedIdentity, cancellationToken);
+        newIdentityModel.Email = newIdentity.Email;
+        newIdentityModel.HashPassword = newIdentity.HashPassword;
+        newIdentityModel.Role = newIdentityModel.Role;
+        newIdentityModel.FirstName = newIdentityModel.FirstName;
+        newIdentityModel.LastName = newIdentityModel.LastName;
+
+        return newIdentityModel;
+    }
+
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var deletedIdentity = await identityRepository.GetAsync(id);
+        if (deletedIdentity is null)
+        {
+            throw new NotFoundException(ExceptionConstants.UserExists);
         }
 
-        public async Task<IdentityModel> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        await identityRepository.DeleteAsync(deletedIdentity, cancellationToken);
+    }
+
+    public async Task<IdentityModel> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var chekedIdentity = await identityRepository.GetAsync(id, cancellationToken);
+
+        return new IdentityModel
         {
-            var chekedIdentity = await identityRepository.GetAsync(id, cancellationToken);
+            Id = chekedIdentity.Id,
+            Email = chekedIdentity.Email,
+            FirstName = chekedIdentity.FirstName,
+            LastName = chekedIdentity.LastName,
+            HashPassword = chekedIdentity.HashPassword,
+            Role = chekedIdentity.Role
+        };
+    }
 
-            return new IdentityModel
-            {
-                Id = chekedIdentity.Id,
-                Email = chekedIdentity.Email,
-                FirstName = chekedIdentity.FirstName,
-                LastName = chekedIdentity.LastName,
-                HashPassword = chekedIdentity.HashPassword,
-                Role = chekedIdentity.Role
-            };
-        }
+    public async Task<IdentityModel> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var chekedIdentity = await identityRepository.GetByEmailAsync(email, cancellationToken);
 
-        public async Task<IdentityModel> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        return new IdentityModel
         {
-            var chekedIdentity = await identityRepository.GetByEmailAsync(email, cancellationToken);
+            Id = chekedIdentity.Id,
+            Email = chekedIdentity.Email,
+            FirstName = chekedIdentity.FirstName,
+            LastName = chekedIdentity.LastName,
+            HashPassword = chekedIdentity.HashPassword,
+            Role = chekedIdentity.Role
+        };
+    }
 
-            return new IdentityModel
-            {
-                Id = chekedIdentity.Id,
-                Email = chekedIdentity.Email,
-                FirstName = chekedIdentity.FirstName,
-                LastName = chekedIdentity.LastName,
-                HashPassword = chekedIdentity.HashPassword,
-                Role = chekedIdentity.Role
-            };
-        }
+    public async Task<IdentityModel> UpdateAsync(IdentityModel updatedIdentityModel, CancellationToken cancellationToken = default)
+    {
+        var updatedIdentity = await identityRepository.GetByEmailAsync(updatedIdentityModel.Email, cancellationToken);
 
-        public async Task<IdentityModel> UpdateAsync(IdentityModel updatedIdentityModel, CancellationToken cancellationToken = default)
+        updatedIdentity = await identityRepository.UpdateAsync(new Identity
         {
-            var updatedIdentity = await identityRepository.GetByEmailAsync(updatedIdentityModel.Email, cancellationToken);
+            Email = updatedIdentityModel.Email,
+            FirstName = updatedIdentityModel.FirstName,
+            LastName = updatedIdentityModel.LastName,
+            HashPassword = updatedIdentityModel.HashPassword,
+            Role = updatedIdentityModel.Role,
+            UpdatedAt = DateTime.UtcNow
+        }, cancellationToken);
 
-            updatedIdentity = await identityRepository.UpdateAsync(new Identity
-            {
-                Email = updatedIdentityModel.Email,
-                FirstName = updatedIdentityModel.FirstName,
-                LastName = updatedIdentityModel.LastName,
-                HashPassword = updatedIdentityModel.HashPassword,
-                Role = updatedIdentityModel.Role,
-                UpdatedAt = DateTime.UtcNow
-            }, cancellationToken);
+        updatedIdentityModel.FirstName = updatedIdentity.FirstName;
+        updatedIdentityModel.LastName = updatedIdentity.LastName;
+        updatedIdentityModel.Id = updatedIdentity.Id;
+        updatedIdentity.Email = updatedIdentityModel.Email;
 
-            updatedIdentityModel.FirstName = updatedIdentity.FirstName;
-            updatedIdentityModel.LastName = updatedIdentity.LastName;
-            updatedIdentityModel.Id = updatedIdentity.Id;
-            updatedIdentity.Email = updatedIdentityModel.Email;
-
-            return updatedIdentityModel;
-        }
+        return updatedIdentityModel;
     }
 }
