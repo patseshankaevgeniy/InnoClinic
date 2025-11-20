@@ -19,6 +19,8 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var result = await authService.SignUpAsync(new SignUpModel
         {
+            FirstName = signUpDto.FirstName,
+            LastName = signUpDto.LastName,
             Email = signUpDto.Email,
             Password = signUpDto.Password,
             ReEnteredPassword = signUpDto.ReEnteredPassword
