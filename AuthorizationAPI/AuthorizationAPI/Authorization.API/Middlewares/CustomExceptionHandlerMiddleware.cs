@@ -6,8 +6,7 @@ using System.Net;
 
 namespace Authorization.API.Middlewares;
 
-public sealed class CustomExceptionHandlerMiddleware(
-        RequestDelegate next)
+public sealed class CustomExceptionHandlerMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context)
     {
