@@ -4,38 +4,46 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Authorization.DAL.Repositories;
 
-public class IdentityRepository(ApplicationDbContext db) : IIdentityRepository
+public class IdentityRepository : IIdentityRepository
 {
+    private readonly ApplicationDbContext _db;
+    private readonly DbSet<Identity> _identities;
+
+    public IdentityRepository(ApplicationDbContext db)
+    {
+        _db = db;
+        _identities = db.Set<Identity>();
+    }
     public async Task<Identity> CreateAsync(Identity newUser, CancellationToken cancellationToken = default)
     {
-        await db.Identities.AddAsync(newUser);
-        await db.SaveChangesAsync(cancellationToken);
+        await _identities.AddAsync(newUser);
+        await _db.SaveChangesAsync(cancellationToken);
         return newUser;
     }
 
     public async Task<Identity?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await db.Identities
+        return await _identities
             .FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task<Identity?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await db.Identities
+        return await _identities
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Identity> UpdateAsync(Identity newUser, CancellationToken cancellationToken = default)
     {
-        db.Identities.Update(newUser);
-        await db.SaveChangesAsync(cancellationToken);
+        _identities.Update(newUser);
+        await _db.SaveChangesAsync(cancellationToken);
 
         return newUser;
     }
 
     public async Task DeleteAsync(Identity identity, CancellationToken cancellationToken = default)
     {
-        db.Identities.Remove(identity);
-        await db.SaveChangesAsync();
+        _identities.Remove(identity);
+        await _db.SaveChangesAsync();
     }
 }

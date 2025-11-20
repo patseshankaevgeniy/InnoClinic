@@ -22,7 +22,7 @@ public sealed class IdentityService(IIdentityRepository identityRepository) : II
         {
             Id = Guid.NewGuid(),
             Email = newIdentityModel.Email,
-            HashPassword = newIdentityModel.HashPassword,
+            HashPassword = newIdentityModel.Password,
             Role = newIdentityModel.Role,
             FirstName = newIdentityModel.FirstName,
             LastName = newIdentityModel.LastName,
@@ -31,7 +31,7 @@ public sealed class IdentityService(IIdentityRepository identityRepository) : II
         });
 
         newIdentityModel.Email = newIdentity.Email;
-        newIdentityModel.HashPassword = newIdentity.HashPassword;
+        newIdentityModel.Password = newIdentity.HashPassword;
         newIdentityModel.Role = newIdentityModel.Role;
         newIdentityModel.FirstName = newIdentityModel.FirstName;
         newIdentityModel.LastName = newIdentityModel.LastName;
@@ -60,7 +60,7 @@ public sealed class IdentityService(IIdentityRepository identityRepository) : II
             Email = chekedIdentity.Email,
             FirstName = chekedIdentity.FirstName,
             LastName = chekedIdentity.LastName,
-            HashPassword = chekedIdentity.HashPassword,
+            Password = chekedIdentity.HashPassword,
             Role = chekedIdentity.Role
         };
     }
@@ -75,7 +75,7 @@ public sealed class IdentityService(IIdentityRepository identityRepository) : II
             Email = chekedIdentity.Email,
             FirstName = chekedIdentity.FirstName,
             LastName = chekedIdentity.LastName,
-            HashPassword = chekedIdentity.HashPassword,
+            Password = chekedIdentity.HashPassword,
             Role = chekedIdentity.Role
         };
     }
@@ -89,7 +89,7 @@ public sealed class IdentityService(IIdentityRepository identityRepository) : II
             Email = updatedIdentityModel.Email,
             FirstName = updatedIdentityModel.FirstName,
             LastName = updatedIdentityModel.LastName,
-            HashPassword = updatedIdentityModel.HashPassword,
+            HashPassword = updatedIdentityModel.Password,
             Role = updatedIdentityModel.Role,
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);

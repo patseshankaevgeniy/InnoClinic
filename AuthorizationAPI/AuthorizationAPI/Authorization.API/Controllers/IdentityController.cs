@@ -15,58 +15,55 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 {
     [HttpPost(RouteCostants.CreateIdentityRoute)]
     [Authorize(Roles = "Admin")]
-    [ProducesResponseType(Status201Created, Type = typeof(IdentityDto))]
-    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status403Forbidden, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<IdentityDto> CreateIdentityAsync(IdentityDto newIdentityDto)
+    [ProducesResponseType(typeof(IdentityDto), Status201Created)]
+    [ProducesResponseType(typeof(ErrorDto), Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDto), Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorDto), Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
+    public async Task<ActionResult<IdentityDto>> CreateAsync(CreatedIdentityDto newIdentityDto)
     {
         var identityModel = await identityService.CreateAsync(new IdentityModel
         {
             Email = newIdentityDto.Email,
             FirstName = newIdentityDto.FirstName,
             LastName = newIdentityDto.LastName,
-            HashPassword = newIdentityDto.HashPassword,
+            Password = newIdentityDto.Password,
             Role = newIdentityDto.Role,
         });
 
-        newIdentityDto.Role = identityModel.Role;
-        newIdentityDto.Email = identityModel.Email;
-        newIdentityDto.FirstName = identityModel.FirstName;
-        newIdentityDto.LastName = identityModel.LastName;
-        newIdentityDto.HashPassword = identityModel.HashPassword;
-        newIdentityDto.Id = identityModel.Id;
-
-        return newIdentityDto;
+        return new IdentityDto
+        {
+            FirstName = identityModel.FirstName,
+            Email = identityModel.Email,
+            LastName = identityModel.LastName,
+            Role = identityModel.Role,
+        };
     }
 
     [HttpGet(RouteCostants.GetIdentityRoute)]
-    [ProducesResponseType(Status200OK, Type = typeof(IdentityDto))]
-    [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status404NotFound, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<IdentityDto> GetUserAsync(Guid id)
+    [ProducesResponseType(typeof(IdentityDto), Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorDto), Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
+    public async Task<IdentityDto> GetAsync(Guid id)
     {
         var identityModel = await identityService.GetAsync(id);
 
         return new IdentityDto
         {
-            Id = identityModel.Id,
             FirstName = identityModel.FirstName,
             LastName = identityModel.LastName,
             Email = identityModel.Email,
-            HashPassword = identityModel.HashPassword,
             Role = identityModel.Role,
         };
     }
 
     [HttpPut(RouteCostants.UpdateIdentityRoute)]
     [ProducesResponseType(Status204NoContent)]
-    [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status404NotFound, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<IdentityDto> UpdateUserAsync(IdentityDto updatedIdentityDto)
+    [ProducesResponseType(typeof(ErrorDto), Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorDto), Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
+    public async Task<CreatedIdentityDto> UpdateAsync(CreatedIdentityDto updatedIdentityDto)
     {
         var identityModel = await identityService.UpdateAsync(new IdentityModel
         {
@@ -74,7 +71,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             Email = updatedIdentityDto.Email,
             FirstName = updatedIdentityDto.FirstName,
             LastName = updatedIdentityDto.LastName,
-            HashPassword = updatedIdentityDto.HashPassword,
+            Password = updatedIdentityDto.Password,
             Role = updatedIdentityDto.Role,
         });
 
@@ -82,17 +79,17 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
         updatedIdentityDto.Email = identityModel.Email;
         updatedIdentityDto.FirstName = identityModel.FirstName;
         updatedIdentityDto.LastName = identityModel.LastName;
-        updatedIdentityDto.HashPassword = identityModel.HashPassword;
+        updatedIdentityDto.Password = identityModel.Password;
         updatedIdentityDto.Id = identityModel.Id;
-        
+
         return updatedIdentityDto;
     }
 
     [HttpDelete(RouteCostants.DeleteIdentityRoute)]
     [ProducesResponseType(Status204NoContent)]
-    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status401Unauthorized, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
+    [ProducesResponseType(typeof(ErrorDto), Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDto), Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
     public async Task<ActionResult> DeleteAsync(Guid id)
     {
         await identityService.DeleteAsync(id);

@@ -40,11 +40,6 @@ public sealed class AuthService(IIdentityRepository identityRepository,
         };
     }
 
-    public Task<AuthResultModel> SignOutAsync(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<AuthResultModel> SignUpAsync(SignUpModel signUpModel, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(signUpModel.ReEnteredPassword))

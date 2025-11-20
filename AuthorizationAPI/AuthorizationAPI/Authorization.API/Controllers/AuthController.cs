@@ -12,9 +12,9 @@ namespace Autorization.API.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost(RouteCostants.SignUpRoute)]
-    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
-    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
+    [ProducesResponseType(typeof(AuthResultDto), Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError )]
     public async Task<AuthResultDto> SignUpAsync(SignUpDto signUpDto)
     {
         var result = await authService.SignUpAsync(new SignUpModel
@@ -34,9 +34,9 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpPost(RouteCostants.SignInRoute)]
-    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
-    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
+    [ProducesResponseType(typeof(AuthResultDto), Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
     public async Task<AuthResultDto> SignInAsync(SignInDto signInDto)
     {
         var result = await authService.SignInAsync(new SignInModel
@@ -51,16 +51,5 @@ public class AuthController(IAuthService authService) : ControllerBase
             RefreshToken = result.RefreshToken
         };
         return authResultDto;
-    }
-
-    [HttpPost]
-    [ProducesResponseType(Status200OK, Type = typeof(AuthResultDto))]
-    [ProducesResponseType(Status400BadRequest, Type = typeof(ErrorDto))]
-    [ProducesResponseType(Status500InternalServerError, Type = typeof(ErrorDto))]
-    public async Task<ActionResult> SignOutAsync()
-    {
-        var result = await authService.SignOutAsync();
-
-        return Ok(result);
     }
 }
