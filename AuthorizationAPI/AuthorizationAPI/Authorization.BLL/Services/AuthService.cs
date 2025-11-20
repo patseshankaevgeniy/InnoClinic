@@ -1,4 +1,5 @@
-﻿using Authorization.BLL.Models;
+﻿using Authorization.BLL.Constants;
+using Authorization.BLL.Models;
 using Authorization.BLL.Services.Interfaces;
 using Authorization.DAL.Entities;
 using Authorization.DAL.Repositories.Interfaces;
@@ -6,35 +7,35 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Authorization.BLL.Services;
 
-public sealed class AuthService(IUserRepository userRepository,
+public sealed class AuthService(IIdentityRepository identityRepository,
     IJwtTokenService jwtTokenService) : IAuthService
 {
     public async Task<AuthResultModel> SignInAsync(SignInModel signInModel, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(signInModel.Email))
         {
-            throw new ValidationException("Email can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongEmail);
         }
 
         if (string.IsNullOrEmpty(signInModel.Password))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
-        var user = await userRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
-        if (user is null)
+        var identity = await identityRepository.GetByEmailAsync(signInModel.Email, cancellationToken);
+        if (identity is null)
         {
-            throw new NotImplementedException();
+            throw new ValidationException(ExceptionConstants.NoUser);
         }
 
-        if (!string.Equals(user.Password, signInModel.Password))
+        if (!string.Equals(identity.HashPassword, signInModel.Password))
         {
-            throw new ValidationException("Invalid password");
+            throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
         return new AuthResultModel
         {
-            AccessToken = jwtTokenService.GenerateToken(user.Id),
+            AccessToken = jwtTokenService.GenerateToken(identity),
             RefreshToken = jwtTokenService.GenerateRefreshToken()
         };
     }
@@ -43,43 +44,46 @@ public sealed class AuthService(IUserRepository userRepository,
     {
         if (string.IsNullOrEmpty(signUpModel.ReEnteredPassword))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
         if (string.IsNullOrEmpty(signUpModel.Password))
         {
-            throw new ValidationException("Password can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongPassword);
         }
 
         if (string.IsNullOrEmpty(signUpModel.Email))
         {
-            throw new ValidationException("Email can't be null or empty");
+            throw new ValidationException(ExceptionConstants.WrongEmail);
         }
 
         if (!string.Equals(signUpModel.Password, signUpModel.ReEnteredPassword))
         {
-            throw new ValidationException("Passwords do not match");
+            throw new ValidationException(ExceptionConstants.PasswordNotMatch);
         }
 
-        var user = await userRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
-        if (user is not null)
+        var identity = await identityRepository.GetByEmailAsync(signUpModel.Email, cancellationToken);
+        if (identity is not null)
         {
-            throw new NotImplementedException();
+            throw new ValidationException(ExceptionConstants.UserExists);
         }
 
-        var newUser = await userRepository.CreateAsync(new User
+        var newIdentity = await identityRepository.CreateAsync(new Identity
         {
             Id = Guid.NewGuid(),
             Email = signUpModel.Email,
-            Password = signUpModel.Password,
+            HashPassword = signUpModel.Password,
+            FirstName = signUpModel.FirstName,
+            LastName = signUpModel.LastName,
+            Role = UserRole.Patient,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
 
         var authResultModel = await SignInAsync(new SignInModel
         {
-            Email = signUpModel.Email,
-            Password = signUpModel.Password
+            Email = newIdentity.Email,
+            Password = newIdentity.HashPassword
         }, cancellationToken);
 
         return authResultModel;

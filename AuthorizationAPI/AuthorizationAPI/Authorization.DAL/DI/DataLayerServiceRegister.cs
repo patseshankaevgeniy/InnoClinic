@@ -15,6 +15,6 @@ public static class DataLayerServiceRegister
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IIdentityRepository,IdentityRepository>();
     }
 }

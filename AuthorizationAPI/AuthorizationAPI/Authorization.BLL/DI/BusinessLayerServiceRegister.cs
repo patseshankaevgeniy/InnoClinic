@@ -12,7 +12,8 @@ public static class BusinessLayerServiceRegister
     {
         services.RegisterDataLayerDependencies(configuration);
         services.AddScoped<IAuthService, AuthService>()
-                .AddScoped<IJwtTokenService, JwtTokenService>();
+                .AddScoped<IJwtTokenService, JwtTokenService>()
+                .AddScoped<IIdentityService, IdentityService>();
 
         return services;
     }

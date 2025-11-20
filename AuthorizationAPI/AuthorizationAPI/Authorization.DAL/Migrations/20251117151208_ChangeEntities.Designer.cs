@@ -4,6 +4,7 @@ using Authorization.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authorization.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251117151208_ChangeEntities")]
+    partial class ChangeEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,11 +42,11 @@ namespace Authorization.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HashPassword")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -57,6 +60,43 @@ namespace Authorization.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Identities");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Authorization.DAL.Entities.Patient", b =>
+                {
+                    b.HasBaseType("Authorization.DAL.Entities.Identity");
+
+                    b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("Authorization.DAL.Entities.Worker", b =>
+                {
+                    b.HasBaseType("Authorization.DAL.Entities.Identity");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.ToTable("Workers");
+                });
+
+            modelBuilder.Entity("Authorization.DAL.Entities.Patient", b =>
+                {
+                    b.HasOne("Authorization.DAL.Entities.Identity", null)
+                        .WithOne()
+                        .HasForeignKey("Authorization.DAL.Entities.Patient", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Authorization.DAL.Entities.Worker", b =>
+                {
+                    b.HasOne("Authorization.DAL.Entities.Identity", null)
+                        .WithOne()
+                        .HasForeignKey("Authorization.DAL.Entities.Worker", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
