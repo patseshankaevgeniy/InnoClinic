@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 namespace Authorization.API.DI;
@@ -11,6 +12,7 @@ public static class ApplicationLayerServiceRegister
     public static IServiceCollection RegisterApplicationLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.RegisterBusinessLayerDependencies(configuration);
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddHttpContextAccessor();
 
         services.AddSwaggerGen(options =>
