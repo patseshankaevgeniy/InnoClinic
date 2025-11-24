@@ -30,7 +30,9 @@ public class OfficeRepository : IOfficeRepository
 
     public Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return _offices.ToListAsync(cancellationToken);
+        return _offices
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Office?> GetAsync(Guid id, CancellationToken cancellationToken = default)
