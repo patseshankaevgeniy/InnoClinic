@@ -28,16 +28,18 @@ public class OfficeRepository : IOfficeRepository
         await _db.SaveChangesAsync();
     }
 
-    public Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return _offices
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+        return await _offices
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
     }
 
     public async Task<Office?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _offices.FirstOrDefaultAsync(x => x.Id == id);
+        return await _offices
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Office> UpdateAsync(Office updatedOffice, CancellationToken cancellationToken = default)
