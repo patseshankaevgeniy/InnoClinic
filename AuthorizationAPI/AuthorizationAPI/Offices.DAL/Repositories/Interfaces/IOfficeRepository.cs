@@ -4,7 +4,7 @@ namespace Offices.DAL.Repositories.Interfaces;
 
 public interface IOfficeRepository
 {
-    Task<List<Office>> GetAllAsync(bool isNoTracking, CancellationToken cancellationToken = default);
+    Task<List<Office>> GetAllAsync(bool asNoTracking, CancellationToken cancellationToken = default);
     Task<Office?> GetAsync(Guid id, bool isNoTracking, CancellationToken cancellationToken = default);
     Task<Office> CreateAsync(Office newOffice, CancellationToken cancellationToken = default);
     Task<Office> UpdateAsync(Office updatedOffice, CancellationToken cancellationToken = default);
