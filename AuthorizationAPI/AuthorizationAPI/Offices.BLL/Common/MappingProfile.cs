@@ -8,6 +8,7 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Office, OfficeModel>().ReverseMap();
+        CreateMap<Office, OfficeInputModel>().ReverseMap();
+        CreateMap<Office, OfficeResourceModel>();
     }
 }

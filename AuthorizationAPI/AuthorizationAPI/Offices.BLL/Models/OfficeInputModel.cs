@@ -1,6 +1,6 @@
 ﻿namespace Offices.BLL.Models;
 
-public class OfficeModel
+public class OfficeInputModel
 {
     public required Guid Id { get; set; }
     public required string Address { get; set; }

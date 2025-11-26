@@ -4,9 +4,9 @@ namespace Offices.BLL.Services.Interfaces;
 
 public interface IOfficesService
 {
-    Task<List<OfficeModel>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default);
-    Task<OfficeModel> GetAsync(Guid officeId, bool asNoTracking = false, CancellationToken cancellationToken = default);
-    Task<OfficeModel> CreateAsync(OfficeModel newOfficeModel, CancellationToken cancellationToken = default);
-    Task<OfficeModel> UpdateAsync(OfficeModel updatedOfficeModel, CancellationToken cancellationToken = default);
+    Task<List<OfficeInputModel>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<OfficeInputModel> GetAsync(Guid officeId, bool asNoTracking = false, CancellationToken cancellationToken = default);
+    Task<OfficeInputModel> CreateAsync(OfficeInputModel newOfficeModel, CancellationToken cancellationToken = default);
+    Task<OfficeInputModel> UpdateAsync(OfficeInputModel updatedOfficeModel, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid officeId, CancellationToken cancellationToken = default);
 }
