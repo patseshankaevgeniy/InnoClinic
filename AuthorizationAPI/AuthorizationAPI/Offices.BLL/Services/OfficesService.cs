@@ -38,7 +38,7 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
         await officeRepository.DeleteAsync(officeEntity);
     }
 
-    public async Task<List<OfficeModel>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<OfficeModel>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
         var officeEntities = await officeRepository.GetAllAsync(cancellationToken);
 
@@ -47,7 +47,7 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
         return officeModels;
     }
 
-    public async Task<OfficeModel> GetAsync(Guid officeId, CancellationToken cancellationToken = default)
+    public async Task<OfficeModel> GetAsync(Guid officeId, bool asNoTracking = false, CancellationToken cancellationToken = default)
     {
         var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken);
 
