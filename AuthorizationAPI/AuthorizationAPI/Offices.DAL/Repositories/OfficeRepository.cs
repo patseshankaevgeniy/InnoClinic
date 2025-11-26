@@ -15,20 +15,20 @@ public class OfficeRepository : IOfficeRepository
         _offices = db.Set<Office>();
     }
 
-    public async Task<Office> CreateAsync(Office newOffice, CancellationToken cancellationToken = default)
+    public async Task<Office> CreateAsync(Office newOffice, CancellationToken cancellationToken = default, bool asNoTracking = false)
     {
         await _offices.AddAsync(newOffice);
         await _db.SaveChangesAsync(cancellationToken);
         return newOffice;
     }
 
-    public async Task DeleteAsync(Office office, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Office office, CancellationToken cancellationToken = default, bool asNoTracking = false)
     {
         _offices.Remove(office);
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<Office>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default)
+    public async Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default, bool asNoTracking = false)
     {
         if (!asNoTracking)
         {
@@ -41,7 +41,7 @@ public class OfficeRepository : IOfficeRepository
               .ToListAsync(cancellationToken);
     }
 
-    public async Task<Office?> GetAsync(Guid id, bool asNoTracking = false, CancellationToken cancellationToken = default)
+    public async Task<Office?> GetAsync(Guid id, CancellationToken cancellationToken = default, bool asNoTracking = false)
     {
         if (!asNoTracking)
         {
@@ -54,7 +54,7 @@ public class OfficeRepository : IOfficeRepository
                 .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<Office> UpdateAsync(Office updatedOffice, CancellationToken cancellationToken = default)
+    public async Task<Office> UpdateAsync(Office updatedOffice, CancellationToken cancellationToken = default, bool asNoTracking = false)
     {
         _offices.Update(updatedOffice);
         await _db.SaveChangesAsync(cancellationToken);
