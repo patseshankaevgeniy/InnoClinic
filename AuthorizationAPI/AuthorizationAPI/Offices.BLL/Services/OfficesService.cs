@@ -8,7 +8,10 @@ using Offices.DAL.Repositories.Interfaces;
 
 namespace Offices.BLL.Services;
 
-public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) : IOfficesService
+public class OfficesService(
+    IOfficeRepository officeRepository, 
+    IMapper mapper,
+    TimeProvider timeProvider) : IOfficesService
 {
     public async Task<OfficeInputModel> CreateAsync(OfficeInputModel newOfficeModel, CancellationToken cancellationToken = default)
     {
@@ -18,8 +21,8 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
             IsActive = newOfficeModel.IsActive,
             PhoneNumber = newOfficeModel.PhoneNumber,
             Address = newOfficeModel.Address,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = timeProvider.GetUtcNow().DateTime,
+            UpdatedAt = timeProvider.GetUtcNow().DateTime,
         }, cancellationToken);
 
         return mapper.Map<OfficeInputModel>(newOfficeEntity);
@@ -27,7 +30,7 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
 
     public async Task DeleteAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken: cancellationToken);
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken);
 
         if (officeEntity is null)
         {
@@ -37,18 +40,18 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
         await officeRepository.DeleteAsync(officeEntity);
     }
 
-    public async Task<List<OfficeResourceModel>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default)
+    public async Task<List<OfficeResourceModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var officeEntities = await officeRepository.GetAllAsync(asNoTracking, cancellationToken);
+        var officeEntities = await officeRepository.GetAllAsync(cancellationToken);
 
         var officeModels = officeEntities.Select(officeEntity => mapper.Map<OfficeResourceModel>(officeEntity)).ToList();
 
         return officeModels;
     }
 
-    public async Task<OfficeResourceModel> GetAsync(Guid officeId, bool asNoTracking = false, CancellationToken cancellationToken = default)
+    public async Task<OfficeResourceModel> GetAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, asNoTracking, cancellationToken);
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken);
 
         if (officeEntity is null)
         {
@@ -60,7 +63,7 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
 
     public async Task<OfficeInputModel> UpdateAsync(OfficeInputModel updatedOfficeModel, CancellationToken cancellationToken = default)
     {
-        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken: cancellationToken);
+        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken);
 
         if (updatedOfficeEntity is null)
         {
@@ -68,7 +71,7 @@ public class OfficesService(IOfficeRepository officeRepository, IMapper mapper) 
         }
 
         updatedOfficeEntity = mapper.Map<Office>(updatedOfficeModel);
-        updatedOfficeEntity.UpdatedAt = DateTime.UtcNow;
+        updatedOfficeEntity.UpdatedAt = timeProvider.GetUtcNow().DateTime;
 
         updatedOfficeEntity = await officeRepository.UpdateAsync(updatedOfficeEntity, cancellationToken);
 
