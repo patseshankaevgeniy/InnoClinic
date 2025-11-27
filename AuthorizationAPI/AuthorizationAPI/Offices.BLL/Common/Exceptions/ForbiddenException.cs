@@ -1,9 +1,6 @@
 ﻿namespace Offices.BLL.Common.Exceptions;
 
-public sealed class ForbiddenException : Exception
+public sealed class ForbiddenException(string name) 
+    : Exception($"Access to Entity \"{name}\" is forbidden.")
 {
-    public ForbiddenException(string name)
-        : base($"Access to Entity \"{name}\" is forbidden.")
-    {
-    }
 }

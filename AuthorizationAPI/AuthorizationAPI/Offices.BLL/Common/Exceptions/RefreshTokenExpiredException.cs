@@ -1,9 +1,5 @@
 ﻿namespace Offices.BLL.Common.Exceptions;
 
-public sealed class RefreshTokenExpiredException : Exception
+public sealed class RefreshTokenExpiredException(string message) : Exception(message)
 {
-    public RefreshTokenExpiredException(string message)
-        : base(message)
-    {
-    }
 }

@@ -1,13 +1,6 @@
 ﻿namespace Offices.BLL.Common.Exceptions;
 
-public sealed class NotFoundException : Exception
+public sealed class NotFoundException(string name)
+    : Exception($"Entity \"{name}\" was not found.")
 {
-    public NotFoundException()
-    {
-    }
-
-    public NotFoundException(string name)
-       : base($"Entity \"{name}\" was not found.")
-    {
-    }
 }

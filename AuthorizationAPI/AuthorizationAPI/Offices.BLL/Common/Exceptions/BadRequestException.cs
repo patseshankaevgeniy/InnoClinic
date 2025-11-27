@@ -1,9 +1,5 @@
 ﻿namespace Offices.BLL.Common.Exceptions;
 
-public sealed class BadRequestException : Exception
+public sealed class BadRequestException(string message) : Exception(message)
 {
-    public BadRequestException(string message)
-        : base(message)
-    {
-    }
 }
