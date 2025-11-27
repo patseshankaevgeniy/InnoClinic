@@ -29,7 +29,7 @@ public class OfficesService(
     public async Task DeleteAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
         var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken)
-            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         await officeRepository.DeleteAsync(officeEntity);
     }
@@ -46,7 +46,7 @@ public class OfficesService(
     public async Task<OfficeResourceModel> GetAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
         var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken) 
-            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         return mapper.Map<OfficeResourceModel>(officeEntity);
     }
@@ -54,7 +54,7 @@ public class OfficesService(
     public async Task<OfficeInputModel> UpdateAsync(OfficeInputModel updatedOfficeModel, CancellationToken cancellationToken = default)
     {
         var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken)
-            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         updatedOfficeEntity.Address = updatedOfficeModel.Address;
         updatedOfficeEntity.PhoneNumber = updatedOfficeModel.PhoneNumber;
