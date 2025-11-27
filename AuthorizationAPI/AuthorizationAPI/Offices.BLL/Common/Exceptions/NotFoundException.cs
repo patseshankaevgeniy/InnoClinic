@@ -10,9 +10,4 @@ public sealed class NotFoundException : Exception
        : base($"Entity \"{name}\" was not found.")
     {
     }
-
-    public NotFoundException(string name, Exception innerException)
-        : base($"Entity \"{name}\" by ({innerException.InnerException}) was not found.")
-    {
-    }
 }
