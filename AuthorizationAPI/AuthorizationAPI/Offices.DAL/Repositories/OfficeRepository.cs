@@ -28,7 +28,7 @@ public class OfficeRepository : IOfficeRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default, bool asNoTracking = false)
+    public async Task<List<Office>> GetAllAsync(CancellationToken cancellationToken = default, bool asNoTracking = true)
     {
         if (!asNoTracking)
         {
@@ -41,7 +41,7 @@ public class OfficeRepository : IOfficeRepository
               .ToListAsync(cancellationToken);
     }
 
-    public async Task<Office?> GetAsync(Guid id, CancellationToken cancellationToken = default, bool asNoTracking = false)
+    public async Task<Office?> GetAsync(Guid id, CancellationToken cancellationToken = default, bool asNoTracking = default)
     {
         if (!asNoTracking)
         {
