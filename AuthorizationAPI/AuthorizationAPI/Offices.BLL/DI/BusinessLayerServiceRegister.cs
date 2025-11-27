@@ -14,6 +14,7 @@ public static class BusinessLayerServiceRegister
         services.RegisterDataLayerDependencies(configuration);
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddScoped<IOfficesService, OfficesService>();
+        services.AddScoped<IGuidService, GuidService>();
 
         return services;
     }

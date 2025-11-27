@@ -11,18 +11,16 @@ namespace Offices.BLL.Services;
 public class OfficesService(
     IOfficeRepository officeRepository, 
     IMapper mapper,
-    TimeProvider timeProvider) : IOfficesService
+    IGuidService guidService) : IOfficesService
 {
     public async Task<OfficeInputModel> CreateAsync(OfficeInputModel newOfficeModel, CancellationToken cancellationToken = default)
     {
         var newOfficeEntity = await officeRepository.CreateAsync(new Office
         {
-            Id = Guid.NewGuid(),
+            Id = guidService.NewGuid(),
             IsActive = newOfficeModel.IsActive,
             PhoneNumber = newOfficeModel.PhoneNumber,
             Address = newOfficeModel.Address,
-            CreatedAt = timeProvider.GetUtcNow().DateTime,
-            UpdatedAt = timeProvider.GetUtcNow().DateTime,
         }, cancellationToken);
 
         return mapper.Map<OfficeInputModel>(newOfficeEntity);
@@ -30,12 +28,8 @@ public class OfficesService(
 
     public async Task DeleteAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken);
-
-        if (officeEntity is null)
-        {
-            throw new NotFoundException(ExceptionConstants.NotFoundOffice);
-        }
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken)
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
 
         await officeRepository.DeleteAsync(officeEntity);
     }
@@ -51,27 +45,20 @@ public class OfficesService(
 
     public async Task<OfficeResourceModel> GetAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken);
-
-        if (officeEntity is null)
-        {
-            throw new NotFoundException(ExceptionConstants.NotFoundOffice);
-        }
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken) 
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
 
         return mapper.Map<OfficeResourceModel>(officeEntity);
     }
 
     public async Task<OfficeInputModel> UpdateAsync(OfficeInputModel updatedOfficeModel, CancellationToken cancellationToken = default)
     {
-        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken);
+        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken)
+            ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice); ;
 
-        if (updatedOfficeEntity is null)
-        {
-            throw new NotFoundException(ExceptionConstants.NotFoundOffice);
-        }
-
-        updatedOfficeEntity = mapper.Map<Office>(updatedOfficeModel);
-        updatedOfficeEntity.UpdatedAt = timeProvider.GetUtcNow().DateTime;
+        updatedOfficeEntity.Address = updatedOfficeModel.Address;
+        updatedOfficeEntity.PhoneNumber = updatedOfficeModel.PhoneNumber;
+        updatedOfficeEntity.IsActive = updatedOfficeModel.IsActive;
 
         updatedOfficeEntity = await officeRepository.UpdateAsync(updatedOfficeEntity, cancellationToken);
 
