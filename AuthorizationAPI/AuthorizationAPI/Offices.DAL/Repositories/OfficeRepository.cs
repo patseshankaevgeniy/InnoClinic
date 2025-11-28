@@ -41,7 +41,7 @@ public class OfficeRepository : IOfficeRepository
               .ToListAsync(cancellationToken);
     }
 
-    public async Task<Office?> GetAsync(Guid id, bool asNoTracking = false, CancellationToken cancellationToken = default)
+    public async Task<Office?> GetAsync(Guid id, bool asNoTracking = default, CancellationToken cancellationToken = default)
     {
         if (!asNoTracking)
         {
