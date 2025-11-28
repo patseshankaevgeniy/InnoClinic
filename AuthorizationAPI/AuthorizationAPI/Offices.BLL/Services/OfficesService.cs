@@ -28,7 +28,7 @@ public class OfficesService(
 
     public async Task DeleteAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken)
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken: cancellationToken)
             ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         await officeRepository.DeleteAsync(officeEntity);
@@ -36,7 +36,7 @@ public class OfficesService(
 
     public async Task<List<OfficeResourceModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var officeEntities = await officeRepository.GetAllAsync(cancellationToken);
+        var officeEntities = await officeRepository.GetAllAsync(cancellationToken: cancellationToken);
 
         var officeModels = officeEntities.Select(officeEntity => mapper.Map<OfficeResourceModel>(officeEntity)).ToList();
 
@@ -45,7 +45,7 @@ public class OfficesService(
 
     public async Task<OfficeResourceModel> GetAsync(Guid officeId, CancellationToken cancellationToken = default)
     {
-        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken) 
+        var officeEntity = await officeRepository.GetAsync(officeId, cancellationToken: cancellationToken) 
             ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         return mapper.Map<OfficeResourceModel>(officeEntity);
@@ -53,7 +53,7 @@ public class OfficesService(
 
     public async Task<OfficeInputModel> UpdateAsync(OfficeInputModel updatedOfficeModel, CancellationToken cancellationToken = default)
     {
-        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken)
+        var updatedOfficeEntity = await officeRepository.GetAsync(updatedOfficeModel.Id, cancellationToken: cancellationToken)
             ?? throw new NotFoundException(ExceptionConstants.NotFoundOffice);
 
         updatedOfficeEntity.Address = updatedOfficeModel.Address;
