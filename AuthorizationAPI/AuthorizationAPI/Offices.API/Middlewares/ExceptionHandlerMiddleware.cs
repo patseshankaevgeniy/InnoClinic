@@ -43,7 +43,6 @@ public sealed class ExceptionHandlerMiddleware(RequestDelegate next)
                 code = HttpStatusCode.NotFound;
                 break;
             default:
-                code = HttpStatusCode.InternalServerError;
                 result = JsonConvert.SerializeObject(new ErrorDto { Message = exception.Message });
                 break;
         }
