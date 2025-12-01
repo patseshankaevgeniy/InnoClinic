@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
-using Offices.API.Dtos;
+using Offices.API.Dtos.Office;
 using Offices.BLL.Models;
 
 namespace Offices.API.Common;
 
-public sealed class MappingProfile : Profile
+public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<OfficeResourceDto, OfficeResourceModel>().ReverseMap();
-        CreateMap<OfficeInputDto, OfficeInputModel>().ReverseMap();
+        CreateMap<CreatedOfficeDto, OfficeResourceModel>().ReverseMap();
+        CreateMap<OfficeDto, OfficeResourceModel>().ReverseMap();
+        CreateMap<OfficeDto, OfficeInputModel>().ReverseMap();
+        CreateMap<UpdatedOfficeDto, OfficeInputModel>().ReverseMap();
     }
 }

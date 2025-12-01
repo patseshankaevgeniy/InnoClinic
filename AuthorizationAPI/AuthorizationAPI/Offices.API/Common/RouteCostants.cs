@@ -4,9 +4,9 @@ public static class RouteCostants
 {
     public const string OfficesControllerRoute = "api/offices";
 
-    public const string GetAllOfficesRoute = "get-all-offices";
-    public const string GetOfficeRoute = "get-office";
-    public const string CreateOfficeRoute = "create-office";
-    public const string UpdateOfficeRoute = "update-office";
-    public const string DeleteOfficeRoute = "delete-office";
+    public const string GetAllOfficesRoute = "get-all";
+    public const string GetOfficeRoute = "get-by-id";
+    public const string CreateOfficeRoute = "create";
+    public const string UpdateOfficeRoute = "update";
+    public const string DeleteOfficeRoute = "delete";
 }
