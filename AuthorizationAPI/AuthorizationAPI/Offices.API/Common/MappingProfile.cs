@@ -8,9 +8,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<CreatedOfficeDto, OfficeResourceModel>().ReverseMap();
-        CreateMap<OfficeDto, OfficeResourceModel>().ReverseMap();
-        CreateMap<OfficeDto, OfficeInputModel>().ReverseMap();
-        CreateMap<UpdatedOfficeDto, OfficeInputModel>().ReverseMap();
+        CreateMap<CreatedOfficeDto, CreatedOfficeModel>();
+        CreateMap<UpdatedOfficeDto, UpdatedOfficeModel>();
+        CreateMap<OfficeDto, OfficeModel>().ReverseMap();
     }
 }
