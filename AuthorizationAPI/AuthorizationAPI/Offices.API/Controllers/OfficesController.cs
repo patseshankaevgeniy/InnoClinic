@@ -43,7 +43,7 @@ public class OfficesController(IOfficesService officesService, IMapper mapper) :
     [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
     public async Task<OfficeDto> UpdateAsync(UpdatedOfficeDto updateOfficeDto)
     {
-        var updatedOffice = await officesService.UpdateAsync(mapper.Map<OfficeInputModel>(updateOfficeDto));
+        var updatedOffice = await officesService.UpdateAsync(mapper.Map<UpdatedOfficeModel>(updateOfficeDto));
         return mapper.Map<OfficeDto>(updatedOffice);
     }
 
@@ -55,7 +55,7 @@ public class OfficesController(IOfficesService officesService, IMapper mapper) :
     [ProducesResponseType(typeof(ErrorDto), Status500InternalServerError)]
     public async Task<OfficeDto> CreateAsync(CreatedOfficeDto createdOfficeDto)
     {
-        var createdOffice = await officesService.CreateAsync(mapper.Map<OfficeInputModel>(createdOfficeDto));
+        var createdOffice = await officesService.CreateAsync(mapper.Map<CreatedOfficeModel>(createdOfficeDto));
         return mapper.Map<OfficeDto>(createdOffice);
     }
 
