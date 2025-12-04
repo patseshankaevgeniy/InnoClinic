@@ -38,7 +38,7 @@ public class OfficesService(
     {
         var officeEntities = await officeRepository.GetAllAsync(cancellationToken: cancellationToken);
 
-        var officeModels = officeEntities.Select(officeEntity => mapper.Map<OfficeModel>(officeEntity)).ToList();
+        var officeModels = mapper.Map<List<OfficeModel>>(officeEntities);
 
         return officeModels;
     }
