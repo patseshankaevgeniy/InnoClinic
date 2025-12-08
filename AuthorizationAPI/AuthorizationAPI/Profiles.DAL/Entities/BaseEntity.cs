@@ -7,5 +7,5 @@ public class BaseEntity
     public required string LastName { get; set; }
     public required string MiddleName { get; set; }
     public required string PhoneNumber { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public required DateTime DateOfBirth { get; set; }
 }

@@ -3,8 +3,8 @@
 public class Procedure
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public Guid SpecializationId { get; set; }
+    public required string Name { get; set; }
+    public required Guid SpecializationId { get; set; }
 
-    public Specialization Specialization { get; set; }
+    public required Specialization Specialization { get; set; }
 }
