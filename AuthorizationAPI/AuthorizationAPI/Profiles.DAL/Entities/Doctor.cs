@@ -6,7 +6,7 @@ public class Doctor : BaseEntity
 {
     public required DoctorStatus Status { get; set; }
     public required DateTime CareerStartAt { get; set; }
-    public required Guid SpecializationId { get; set; }
+    public Guid SpecializationId { get; set; }
 
-    public required Specialization Specialization { get; set; }
+    public Specialization Specialization { get; set; } = null!;
 }

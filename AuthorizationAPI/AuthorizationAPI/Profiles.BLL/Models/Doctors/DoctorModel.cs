@@ -3,9 +3,8 @@ using Profiles.DAL.Enums;
 
 namespace Profiles.BLL.Models.Doctors;
 
-public class DoctorModel
+public class DoctorModel : BaseModel
 {
-    public Guid Id { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string MiddleName { get; set; }
