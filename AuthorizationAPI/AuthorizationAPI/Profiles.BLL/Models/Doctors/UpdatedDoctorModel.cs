@@ -7,5 +7,6 @@ public class UpdatedDoctorModel
 {
     public required string PhoneNumber { get; set; }
     public DoctorStatus Status { get; set; }
+
     public SpecializationModel Specialization { get; set; }
 }
