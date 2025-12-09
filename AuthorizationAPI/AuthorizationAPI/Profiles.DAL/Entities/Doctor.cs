@@ -2,7 +2,7 @@
 
 namespace Profiles.DAL.Entities;
 
-public class Doctor : BaseEntity
+public class Doctor : User
 {
     public required DoctorStatus Status { get; set; }
     public required DateTime CareerStartAt { get; set; }

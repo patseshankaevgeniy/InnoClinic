@@ -1,5 +1,5 @@
 ﻿namespace Profiles.DAL.Entities;
 
-public class Receptionist : BaseEntity
+public class Receptionist : User
 {
 }

@@ -1,8 +1,7 @@
 ﻿namespace Profiles.DAL.Entities;
 
-public class Procedure
+public class Procedure : BaseEntity
 {
-    public Guid Id { get; set; }
     public required string Name { get; set; }
     public Guid SpecializationId { get; set; }
 
