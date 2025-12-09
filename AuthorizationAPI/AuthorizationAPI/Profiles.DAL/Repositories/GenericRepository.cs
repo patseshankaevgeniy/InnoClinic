@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Profiles.DAL.Entities;
 using Profiles.DAL.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace Profiles.DAL.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly ProfilesDbContext _db;
         private readonly DbSet<TEntity> _entities;
