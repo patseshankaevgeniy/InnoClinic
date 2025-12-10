@@ -1,4 +1,4 @@
-﻿namespace Profiles.DAL.Enums;
+﻿namespace Profiles.DAL.Models.Enums;
 
 public enum DoctorStatus
 {

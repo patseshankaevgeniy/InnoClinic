@@ -1,4 +1,4 @@
-﻿using Profiles.DAL.Enums;
+﻿using Profiles.DAL.Models.Enums;
 
 namespace Profiles.DAL.Entities;
 
