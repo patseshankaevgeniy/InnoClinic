@@ -1,5 +1,5 @@
 ﻿using Profiles.BLL.Models.Specializations;
-using Profiles.DAL.Enums;
+using Profiles.DAL.Models.Enums;
 
 namespace Profiles.BLL.Models.Doctors;
 
