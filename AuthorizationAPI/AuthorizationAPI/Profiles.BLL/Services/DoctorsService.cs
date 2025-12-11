@@ -14,19 +14,19 @@ namespace Profiles.BLL.Services
     IGenericRepository<Specialization> specRepository,
     IMapper mapper) : IDoctorsService
     {
-        public async Task<DoctorModel> CreateAsync(CreatedDoctorModel newModel, CancellationToken cancellationToken = default)
+        public async Task<DoctorModel> CreateAsync(CreatedDoctorModel createdModel, CancellationToken cancellationToken = default)
         {
-            var newDoctorSpecialization = await FindSpecialization(newModel.SpecializationName, cancellationToken);
+            var newDoctorSpecialization = await FindSpecialization(createdModel.SpecializationName, cancellationToken);
 
             var newDoctor = new Doctor
             {
-                FirstName = newModel.FirstName,
-                LastName = newModel.LastName,
-                MiddleName = newModel.MiddleName,
-                PhoneNumber = newModel.PhoneNumber,
-                DateOfBirth = newModel.DateOfBirth,
-                Status = newModel.Status,
-                CareerStartAt = newModel.CareerStartAt,
+                FirstName = createdModel.FirstName,
+                LastName = createdModel.LastName,
+                MiddleName = createdModel.MiddleName,
+                PhoneNumber = createdModel.PhoneNumber,
+                DateOfBirth = createdModel.DateOfBirth,
+                Status = createdModel.Status,
+                CareerStartAt = createdModel.CareerStartAt,
                 SpecializationId = newDoctorSpecialization.Id,
             };
 

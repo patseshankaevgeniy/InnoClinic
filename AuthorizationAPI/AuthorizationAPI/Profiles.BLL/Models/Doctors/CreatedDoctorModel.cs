@@ -7,5 +7,5 @@ public sealed class CreatedDoctorModel : UserModel
     public DoctorStatus Status { get; set; }
     public DateTime CareerStartAt { get; set; }
 
-    public string SpecializationName { get; set; }
+    public required string SpecializationName { get; set; }
 }

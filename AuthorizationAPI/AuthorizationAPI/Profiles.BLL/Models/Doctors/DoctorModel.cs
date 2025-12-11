@@ -9,5 +9,5 @@ public sealed class DoctorModel : UserModel
     public DoctorStatus Status { get; set; }
     public DateTime CareerStartAt { get; set; }
 
-    public SpecializationModel Specialization { get; set; }
+    public required SpecializationModel Specialization { get; set; }
 }

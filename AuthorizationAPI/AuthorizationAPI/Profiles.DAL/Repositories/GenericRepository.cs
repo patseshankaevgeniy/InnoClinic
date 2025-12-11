@@ -39,14 +39,10 @@ namespace Profiles.DAL.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public Task<List<TEntity>> GetPagedAsync(PaginationParameters paginationParameters, Expression<Func<TEntity, bool>> predicate, bool disableTracking = true, CancellationToken cancellationToken = default)
+        public Task<List<TEntity>> GetPagedAsync(PaginationParameters paginationParameters, bool disableTracking = true, CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> query = _entities;
 
-            if (predicate is not null)
-            {
-                query = query.Where(predicate);
-            }
             if (disableTracking)
             {
                 query = query.AsNoTracking();
@@ -60,7 +56,7 @@ namespace Profiles.DAL.Repositories
             return query.ToListAsync(cancellationToken);
         }
 
-        public async Task<TEntity?> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
+        public async Task<TEntity?> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> query = _entities;
 
@@ -78,25 +74,25 @@ namespace Profiles.DAL.Repositories
                            .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<TEntity> CreateAsync(TEntity item, CancellationToken cancellationToken = default)
+        public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            _entities.Add(item);
+            _entities.Add(entity);
             await db.SaveChangesAsync(cancellationToken);
 
-            return item;
+            return entity;
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity item, CancellationToken cancellationToken = default)
+        public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            _entities.Update(item);
+            _entities.Update(entity);
             await db.SaveChangesAsync(cancellationToken);
 
-            return item;
+            return entity;
         }
 
-        public async Task DeleteAsync(TEntity item, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            _entities.Remove(item);
+            _entities.Remove(entity);
             await db.SaveChangesAsync(cancellationToken);
         }
     }
