@@ -13,6 +13,7 @@ public sealed class MappingProfile : Profile
         // Doctor mappings
         CreateMap<Doctor, DoctorModel>().ReverseMap();
         CreateMap<Doctor, CreatedDoctorModel>();
+        CreateMap<Doctor, UpdatedDoctorModel>().ReverseMap();
 
         // Pagination mappings
         CreateMap<PaginationParametersModel, PaginationParameters>();

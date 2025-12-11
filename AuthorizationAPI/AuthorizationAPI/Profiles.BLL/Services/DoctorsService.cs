@@ -18,17 +18,9 @@ namespace Profiles.BLL.Services
         {
             var newDoctorSpecialization = await FindSpecialization(createdModel.SpecializationName, cancellationToken);
 
-            var newDoctor = new Doctor
-            {
-                FirstName = createdModel.FirstName,
-                LastName = createdModel.LastName,
-                MiddleName = createdModel.MiddleName,
-                PhoneNumber = createdModel.PhoneNumber,
-                DateOfBirth = createdModel.DateOfBirth,
-                Status = createdModel.Status,
-                CareerStartAt = createdModel.CareerStartAt,
-                SpecializationId = newDoctorSpecialization.Id,
-            };
+            var newDoctor = mapper.Map<Doctor>(createdModel);
+
+            newDoctor.SpecializationId = newDoctorSpecialization.Id;
 
             newDoctor = await doctorRepository.CreateAsync(newDoctor, cancellationToken: cancellationToken);
 
@@ -73,22 +65,14 @@ namespace Profiles.BLL.Services
                 throw new Exception();
             }
 
-            updatedDoctor.FirstName = updatedModel.FirstName;
-            updatedDoctor.LastName = updatedModel.LastName;
-            updatedDoctor.MiddleName = updatedModel.MiddleName;
-            updatedDoctor.PhoneNumber = updatedModel.PhoneNumber;
-            updatedDoctor.Status = updatedModel.Status;
-            updatedDoctor.Specialization = doctorSpecialization;
-            updatedDoctor.SpecializationId = doctorSpecialization.Id;
-
-            updatedDoctor = await doctorRepository.UpdateAsync(updatedDoctor);
+            updatedDoctor = await doctorRepository.UpdateAsync(mapper.Map(updatedModel, updatedDoctor));
 
             return mapper.Map<DoctorModel>(updatedDoctor);
         }
 
-        public async Task DeleteAsync(Guid doctorId, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var deletedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == doctorId, cancellationToken: cancellationToken);
+            var deletedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
 
             if (deletedDoctor is null)
             {
