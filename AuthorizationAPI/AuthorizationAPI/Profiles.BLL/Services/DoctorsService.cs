@@ -36,6 +36,7 @@ namespace Profiles.BLL.Services
 
             if (doctorEntity is null)
             {
+                //here will be logic with an custom exception
                 throw new Exception();
             }
 
@@ -62,6 +63,7 @@ namespace Profiles.BLL.Services
             var updatedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == updatedModel.Id);
             if (updatedDoctor is null)
             {
+                //here will be logic with an custom exception
                 throw new Exception();
             }
 
@@ -76,6 +78,7 @@ namespace Profiles.BLL.Services
 
             if (deletedDoctor is null)
             {
+                //here will be logic with an custom exception
                 throw new Exception();
             }
 
@@ -87,6 +90,7 @@ namespace Profiles.BLL.Services
             var specialization = await specRepository.GetByPredicateAsync(x => x.Name == specializationName, cancellationToken: cancellationToken);
             if (specialization is null)
             {
+                //here will be logic with an custom exception
                 throw new Exception();
             }
 
