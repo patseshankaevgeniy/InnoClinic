@@ -2,6 +2,6 @@
 
 public class PaginationParametersDto
 {
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
+    public required int PageNumber { get; set; }
+    public required int PageSize { get; set; }
 }

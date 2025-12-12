@@ -1,16 +1,15 @@
 ﻿using Profiles.DAL.Models.Enums;
 
-namespace Profiles.API.Dtos.Doctors
+namespace Profiles.API.Dtos.Doctors;
+
+public class CreatedDoctorDto
 {
-    public class CreatedDoctorDto
-    {
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public required string MiddleName { get; set; }
-        public required string PhoneNumber { get; set; }
-        public required string SpecializationName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public DoctorStatus Status { get; set; }
-        public DateTime CareerStartAt { get; set; }
-    }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public string? MiddleName { get; set; }
+    public required string PhoneNumber { get; set; }
+    public required string SpecializationName { get; set; }
+    public required DateTime DateOfBirth { get; set; }
+    public required DoctorStatus Status { get; set; }
+    public required DateTime CareerStartAt { get; set; }
 }
