@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>11d8ee75-3dea-48a2-8417-c2cd9bde7b8b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,10 +13,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Profiles.BLL\Profiles.BLL.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Controllers\" />
 	</ItemGroup>
 	
 </Project>
