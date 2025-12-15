@@ -1,3 +1,7 @@
+using Profiles.API.DI;
+
+namespace Profiles.API;
+
 public static class Program
 {
     public static void Main(string[] args)
@@ -5,6 +9,7 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+        builder.Services.RegisterApplicationLayerDependencies(builder.Configuration);
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
