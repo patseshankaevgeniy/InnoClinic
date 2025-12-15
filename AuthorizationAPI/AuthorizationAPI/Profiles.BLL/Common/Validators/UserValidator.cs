@@ -9,7 +9,7 @@ public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TM
 
     protected UserValidator(TimeProvider timeProvider)
     {
-        DateTimeOffset Now = timeProvider.GetUtcNow();
+        this.Now = timeProvider.GetUtcNow();
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
