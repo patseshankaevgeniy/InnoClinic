@@ -1,26 +1,32 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using Profiles.BLL.Common.Constants;
+using Profiles.BLL.Common.Exceptions;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
 using Profiles.BLL.Services.Interfaces;
 using Profiles.DAL.Entities;
 using Profiles.DAL.Models;
 using Profiles.DAL.Repositories.Interfaces;
+using ValidationException = Profiles.BLL.Common.Exceptions.ValidationException;
 
 namespace Profiles.BLL.Services
 {
     public class DoctorsService(
     IGenericRepository<Doctor> doctorRepository,
-    IGenericRepository<Specialization> specRepository,
+     IValidator<CreatedDoctorModel> createdDoctorValidator,
+    IValidator<UpdatedDoctorModel> updatedDoctorValidator,
     IMapper mapper) : IDoctorsService
     {
         public async Task<DoctorModel> CreateAsync(CreatedDoctorModel createdModel, CancellationToken cancellationToken = default)
         {
-            var newDoctorSpecialization = await FindSpecialization(createdModel.SpecializationName, cancellationToken);
+            var validationResult = await createdDoctorValidator.ValidateAsync(createdModel, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.ToString());
+            }
 
             var newDoctor = mapper.Map<Doctor>(createdModel);
-
-            newDoctor.SpecializationId = newDoctorSpecialization.Id;
 
             newDoctor = await doctorRepository.CreateAsync(newDoctor, cancellationToken: cancellationToken);
 
@@ -29,15 +35,11 @@ namespace Profiles.BLL.Services
 
         public async Task<DoctorModel> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var doctorEntity = await doctorRepository
-                    .GetByPredicateAsync(
-                        x => x.Id == id,
-                        x => x.Include(d => d.Specialization));
+            var doctorEntity = await doctorRepository.GetByPredicateAsync(x => x.Id == id);
 
             if (doctorEntity is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             return mapper.Map<DoctorModel>(doctorEntity);
@@ -58,13 +60,16 @@ namespace Profiles.BLL.Services
 
         public async Task<DoctorModel> UpdateAsync(UpdatedDoctorModel updatedModel, CancellationToken cancellationToken = default)
         {
-            var doctorSpecialization = await FindSpecialization(updatedModel.SpecializationName, cancellationToken);
+            var validationResult = await updatedDoctorValidator.ValidateAsync(updatedModel, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.ToString());
+            }
 
             var updatedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == updatedModel.Id);
             if (updatedDoctor is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             updatedDoctor = await doctorRepository.UpdateAsync(mapper.Map(updatedModel, updatedDoctor));
@@ -78,23 +83,10 @@ namespace Profiles.BLL.Services
 
             if (deletedDoctor is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             await doctorRepository.DeleteAsync(deletedDoctor);
-        }
-
-        private async Task<Specialization> FindSpecialization(string specializationName, CancellationToken cancellationToken)
-        {
-            var specialization = await specRepository.GetByPredicateAsync(x => x.Name == specializationName, cancellationToken: cancellationToken);
-            if (specialization is null)
-            {
-                //here will be logic with an custom exception
-                throw new Exception();
-            }
-
-            return specialization;
         }
     }
 }
