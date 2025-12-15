@@ -34,8 +34,8 @@ public class DoctorsController(IDoctorsService doctorService, IMapper mapper) : 
         return mapper.Map<List<DoctorDto>>(doctorModels).ToList();
     }
 
-    [HttpGet(RouteConstants.GetCountRoute)]
-    public async Task<List<DoctorDto>> GetCountAsync([FromQuery] PaginationParametersDto paginationParameters)
+    [HttpGet(RouteConstants.GetPagedRoute)]
+    public async Task<List<DoctorDto>> GetPagedAsync([FromQuery] PaginationParametersDto paginationParameters)
     {
         var doctors = await doctorService.GetPagedAsync(mapper.Map<PaginationParametersModel>(paginationParameters));
 

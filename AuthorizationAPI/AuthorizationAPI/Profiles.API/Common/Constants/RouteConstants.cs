@@ -8,7 +8,7 @@ public static class RouteConstants
     public const string ReceptionistsControllerRoute = BaseApiRoute + "/receptionists";
 
     public const string GetAllRoute = "get-all";
-    public const string GetCountRoute = "get-counts";
+    public const string GetPagedRoute = "get-paged";
     public const string GetRoute = "get-by-id";
     public const string CreateRoute = "create";
     public const string UpdateRoute = "update";
