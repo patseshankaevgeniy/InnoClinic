@@ -5,9 +5,11 @@ namespace Profiles.BLL.Common.Validators;
 
 public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TModel : UserModel
 {
+    protected DateTimeOffset Now { get; }
+
     protected UserValidator(TimeProvider timeProvider)
     {
-        DateTimeOffset now = timeProvider.GetUtcNow();
+        DateTimeOffset Now = timeProvider.GetUtcNow();
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
@@ -25,7 +27,7 @@ public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TM
             .Matches(@"^\+?[\d\s\-]{8,20}$");
         RuleFor(x => x.DateOfBirth)
             .NotNull()
-            .LessThan(now.DateTime)
-            .GreaterThan(now.AddYears(-150).DateTime);
+            .LessThan(Now.DateTime)
+            .GreaterThan(Now.AddYears(-150).DateTime);
     }
 }
