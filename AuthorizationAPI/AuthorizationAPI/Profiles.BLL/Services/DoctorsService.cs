@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Profiles.BLL.Common.Constants;
 using Profiles.BLL.Common.Exceptions;
 using Profiles.BLL.Models;
@@ -8,24 +7,15 @@ using Profiles.BLL.Services.Interfaces;
 using Profiles.DAL.Entities;
 using Profiles.DAL.Models;
 using Profiles.DAL.Repositories.Interfaces;
-using ValidationException = Profiles.BLL.Common.Exceptions.ValidationException;
 
 namespace Profiles.BLL.Services
 {
     public class DoctorsService(
     IGenericRepository<Doctor> doctorRepository,
-     IValidator<CreatedDoctorModel> createdDoctorValidator,
-    IValidator<UpdatedDoctorModel> updatedDoctorValidator,
     IMapper mapper) : IDoctorsService
     {
         public async Task<DoctorModel> CreateAsync(CreatedDoctorModel createdModel, CancellationToken cancellationToken = default)
         {
-            var validationResult = await createdDoctorValidator.ValidateAsync(createdModel, cancellationToken);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.ToString());
-            }
-
             var newDoctor = mapper.Map<Doctor>(createdModel);
 
             newDoctor = await doctorRepository.CreateAsync(newDoctor, cancellationToken: cancellationToken);
@@ -60,12 +50,6 @@ namespace Profiles.BLL.Services
 
         public async Task<DoctorModel> UpdateAsync(UpdatedDoctorModel updatedModel, CancellationToken cancellationToken = default)
         {
-            var validationResult = await updatedDoctorValidator.ValidateAsync(updatedModel, cancellationToken);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.ToString());
-            }
-
             var updatedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == updatedModel.Id);
             if (updatedDoctor is null)
             {
