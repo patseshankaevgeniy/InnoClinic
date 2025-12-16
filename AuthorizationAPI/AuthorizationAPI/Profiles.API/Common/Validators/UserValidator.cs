@@ -1,15 +1,16 @@
 ﻿using FluentValidation;
-using Profiles.BLL.Models;
+using Profiles.API.Dtos;
 
-namespace Profiles.BLL.Common.Validators;
+namespace Profiles.API.Common.Validators;
 
-public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TModel : UserModel
+public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TModel : UserDto
 {
-    protected DateTimeOffset Now { get; }
+    private readonly TimeProvider timeProvider;
+
 
     protected UserValidator(TimeProvider timeProvider)
     {
-        this.Now = timeProvider.GetUtcNow();
+        this.timeProvider = timeProvider;
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
@@ -27,7 +28,8 @@ public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TM
             .Matches(@"^\+?[\d\s\-]{8,20}$");
         RuleFor(x => x.DateOfBirth)
             .NotNull()
-            .LessThan(Now.DateTime)
-            .GreaterThan(Now.AddYears(-150).DateTime);
+            .LessThan(timeProvider.GetUtcNow().DateTime)
+            .GreaterThan(timeProvider.GetUtcNow().AddYears(-150).DateTime);
+        
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Profiles.API.Dtos.Doctors;
 
-public class UpdatedDoctorDto : BaseDto
+public class UpdatedDoctorDto : UserDto
 {
     public required DoctorStatus Status { get; set; }
     public required DateTime CareerStartAt { get; set; }
