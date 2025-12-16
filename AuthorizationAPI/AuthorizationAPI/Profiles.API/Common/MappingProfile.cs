@@ -3,7 +3,6 @@ using Profiles.API.Dtos;
 using Profiles.API.Dtos.Doctors;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
-using Profiles.BLL.Models.Specializations;
 
 namespace Profiles.API.Common;
 
