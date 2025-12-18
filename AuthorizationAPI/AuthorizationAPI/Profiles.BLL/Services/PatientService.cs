@@ -12,11 +12,7 @@ public class PatientService(IGenericRepository<Patient> patientRepository, IMapp
 {
     public async Task<PatientModel> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var patient = await patientRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        if (patient is null)
-        {
-            throw new NotFoundException(ExceptionConstants.NotFoundPatient);
-        }
+        var patient = await CheckPatient(id, cancellationToken);
 
         return mapper.Map<PatientModel>(patient);
     }
@@ -30,26 +26,29 @@ public class PatientService(IGenericRepository<Patient> patientRepository, IMapp
 
     public async Task<PatientModel> UpdateAsync(UpdatedPatientModel updatedModel, CancellationToken cancellationToken = default)
     {
-        var patient = await patientRepository.GetByPredicateAsync(x => x.Id == updatedModel.Id, cancellationToken: cancellationToken);
-        if (patient is null)
-        {
-            throw new NotFoundException(ExceptionConstants.NotFoundPatient);
-        }
+        var updatedPatient = await CheckPatient(updatedModel.Id, cancellationToken);
 
-        patient = mapper.Map(updatedModel, patient);
-        var updatedPatient = await patientRepository.UpdateAsync(patient, cancellationToken);
+        updatedPatient = mapper.Map(updatedModel, updatedPatient);
+
+        updatedPatient = await patientRepository.UpdateAsync(updatedPatient, cancellationToken);
 
         return mapper.Map<PatientModel>(updatedPatient);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var deletedPatient = await patientRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        if (deletedPatient is null)
+        var deletedPatient = await CheckPatient(id, cancellationToken);
+
+        await patientRepository.DeleteAsync(deletedPatient, cancellationToken);
+    }
+
+    private async Task<Patient> CheckPatient(Guid id, CancellationToken cancellationToken = default)
+    {
+        var patient = await patientRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        if (patient is null)
         {
             throw new NotFoundException(ExceptionConstants.NotFoundPatient);
         }
-
-        await patientRepository.DeleteAsync(deletedPatient, cancellationToken);
+        return patient;
     }
 }
