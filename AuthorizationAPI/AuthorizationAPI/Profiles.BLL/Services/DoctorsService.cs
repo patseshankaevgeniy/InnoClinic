@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using Profiles.BLL.Common.Constants;
+using Profiles.BLL.Common.Exceptions;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
 using Profiles.BLL.Services.Interfaces;
@@ -11,16 +12,11 @@ namespace Profiles.BLL.Services
 {
     public class DoctorsService(
     IGenericRepository<Doctor> doctorRepository,
-    IGenericRepository<Specialization> specRepository,
     IMapper mapper) : IDoctorsService
     {
         public async Task<DoctorModel> CreateAsync(CreatedDoctorModel createdModel, CancellationToken cancellationToken = default)
         {
-            var newDoctorSpecialization = await FindSpecialization(createdModel.SpecializationName, cancellationToken);
-
             var newDoctor = mapper.Map<Doctor>(createdModel);
-
-            newDoctor.SpecializationId = newDoctorSpecialization.Id;
 
             newDoctor = await doctorRepository.CreateAsync(newDoctor, cancellationToken: cancellationToken);
 
@@ -29,15 +25,11 @@ namespace Profiles.BLL.Services
 
         public async Task<DoctorModel> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var doctorEntity = await doctorRepository
-                    .GetByPredicateAsync(
-                        x => x.Id == id,
-                        x => x.Include(d => d.Specialization));
+            var doctorEntity = await doctorRepository.GetByPredicateAsync(x => x.Id == id);
 
             if (doctorEntity is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             return mapper.Map<DoctorModel>(doctorEntity);
@@ -58,13 +50,10 @@ namespace Profiles.BLL.Services
 
         public async Task<DoctorModel> UpdateAsync(UpdatedDoctorModel updatedModel, CancellationToken cancellationToken = default)
         {
-            var doctorSpecialization = await FindSpecialization(updatedModel.SpecializationName, cancellationToken);
-
             var updatedDoctor = await doctorRepository.GetByPredicateAsync(x => x.Id == updatedModel.Id);
             if (updatedDoctor is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             updatedDoctor = await doctorRepository.UpdateAsync(mapper.Map(updatedModel, updatedDoctor));
@@ -78,23 +67,10 @@ namespace Profiles.BLL.Services
 
             if (deletedDoctor is null)
             {
-                //here will be logic with an custom exception
-                throw new Exception();
+                throw new NotFoundException(ExceptionConstants.NotFoundDoctor);
             }
 
             await doctorRepository.DeleteAsync(deletedDoctor);
-        }
-
-        private async Task<Specialization> FindSpecialization(string specializationName, CancellationToken cancellationToken)
-        {
-            var specialization = await specRepository.GetByPredicateAsync(x => x.Name == specializationName, cancellationToken: cancellationToken);
-            if (specialization is null)
-            {
-                //here will be logic with an custom exception
-                throw new Exception();
-            }
-
-            return specialization;
         }
     }
 }

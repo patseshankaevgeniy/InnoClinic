@@ -2,7 +2,7 @@
 
 namespace Profiles.API.Dtos;
 
-public class BaseDto
+public class UserDto
 {
     public Guid? Id { get; set; }
     public required string FirstName { get; set; }
