@@ -11,11 +11,10 @@ namespace Profiles.API.Controllers;
 [Route(RouteConstants.PatientsControllerRoute)]
 public class PatientsController(IPatientService patientsService, IMapper mapper) : ControllerBase
 {
-
     [HttpPost(RouteConstants.CreateRoute)]
-    public async Task<PatientDto> CreateAsync(CreatedPatientDto createdPatientDto, CancellationToken cancellationToken = default)
+    public async Task<PatientDto> CreateAsync(PatientDto createdPatientDto, CancellationToken cancellationToken = default)
     {
-        var createdModel = await patientsService.CreateAsync(mapper.Map<CreatedPatientModel>(createdPatientDto), cancellationToken);
+        var createdModel = await patientsService.CreateAsync(mapper.Map<PatientModel>(createdPatientDto), cancellationToken);
         return mapper.Map<PatientDto>(createdModel);
     }
 
@@ -27,9 +26,9 @@ public class PatientsController(IPatientService patientsService, IMapper mapper)
     }
 
     [HttpPut(RouteConstants.UpdateRoute)]
-    public async Task<PatientDto> UpdateAsync(UpdatedPatientDto updatePatientDto, CancellationToken cancellationToken = default)
+    public async Task<PatientDto> UpdateAsync(PatientDto updatedPatientDto, CancellationToken cancellationToken = default)
     {
-        var updatedModel = await patientsService.UpdateAsync(mapper.Map<UpdatedPatientModel>(updatePatientDto), cancellationToken);
+        var updatedModel = await patientsService.UpdateAsync(mapper.Map<PatientModel>(updatedPatientDto), cancellationToken);
         return mapper.Map<PatientDto>(updatedModel);
     }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
+using Profiles.BLL.Models.Patients;
 using Profiles.DAL.Entities;
 using Profiles.DAL.Models;
 
@@ -14,6 +15,8 @@ public sealed class MappingProfile : Profile
         CreateMap<Doctor, DoctorModel>().ReverseMap();
         CreateMap<Doctor, CreatedDoctorModel>();
         CreateMap<Doctor, UpdatedDoctorModel>().ReverseMap();
+
+        CreateMap<Patient, PatientModel>().ReverseMap();
 
         // Pagination mappings
         CreateMap<PaginationParametersModel, PaginationParameters>();

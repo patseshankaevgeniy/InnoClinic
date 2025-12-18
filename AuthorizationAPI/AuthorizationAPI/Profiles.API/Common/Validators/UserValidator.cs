@@ -3,15 +3,17 @@ using Profiles.API.Dtos;
 
 namespace Profiles.API.Common.Validators;
 
-public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TModel : UserDto
+public class UserValidator<TModel> : AbstractValidator<TModel> where TModel : UserDto
 {
     private readonly TimeProvider timeProvider;
-
 
     protected UserValidator(TimeProvider timeProvider)
     {
         this.timeProvider = timeProvider;
 
+        RuleFor(x => x.Id)
+            .NotEqual(Guid.Empty)
+            .When(x => x.Id.HasValue);
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .MaximumLength(20);
@@ -30,6 +32,5 @@ public abstract class UserValidator<TModel> : AbstractValidator<TModel> where TM
             .NotNull()
             .LessThan(timeProvider.GetUtcNow().DateTime)
             .GreaterThan(timeProvider.GetUtcNow().AddYears(-150).DateTime);
-        
     }
 }

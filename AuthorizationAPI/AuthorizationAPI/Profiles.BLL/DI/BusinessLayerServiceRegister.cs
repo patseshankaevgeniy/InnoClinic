@@ -15,6 +15,7 @@ public static class BusinessLayerServiceRegister
         
         // Register BLL services
         services.AddScoped<IDoctorsService, DoctorsService>();
+        services.AddScoped<IPatientService, PatientService>();
 
         // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

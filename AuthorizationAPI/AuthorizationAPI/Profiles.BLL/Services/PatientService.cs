@@ -17,14 +17,14 @@ public class PatientService(IGenericRepository<Patient> patientRepository, IMapp
         return mapper.Map<PatientModel>(patient);
     }
 
-    public async Task<PatientModel> CreateAsync(CreatedPatientModel createdModel, CancellationToken cancellationToken = default)
+    public async Task<PatientModel> CreateAsync(PatientModel createdModel, CancellationToken cancellationToken = default)
     {
         var patientEntity = await patientRepository.CreateAsync(mapper.Map<Patient>(createdModel), cancellationToken);
 
         return mapper.Map<PatientModel>(patientEntity);
     }
 
-    public async Task<PatientModel> UpdateAsync(UpdatedPatientModel updatedModel, CancellationToken cancellationToken = default)
+    public async Task<PatientModel> UpdateAsync(PatientModel updatedModel, CancellationToken cancellationToken = default)
     {
         var updatedPatient = await CheckPatient(updatedModel.Id, cancellationToken);
 

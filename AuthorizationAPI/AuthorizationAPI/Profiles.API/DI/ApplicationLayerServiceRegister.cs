@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Profiles.API.Common.Validators.Doctors;
+using Profiles.API.Dtos;
 using Profiles.BLL.DI;
 using System.Reflection;
 
