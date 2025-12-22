@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Profiles.API.Common.Constants;
-using Profiles.API.Dtos.Patients;
 using Profiles.API.Dtos.Receptionists;
 using Profiles.BLL.Models.Receptionists;
 using Profiles.BLL.Services.Interfaces;

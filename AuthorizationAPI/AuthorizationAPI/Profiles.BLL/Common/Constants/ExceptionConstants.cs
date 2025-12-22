@@ -1,6 +1,6 @@
 ﻿namespace Profiles.BLL.Common.Constants;
 
-public class ExceptionConstants
+public static class ExceptionConstants
 {
     // Doctors
     public const string DoctorAlreadyExists = "Doctor with that name already exists.";
