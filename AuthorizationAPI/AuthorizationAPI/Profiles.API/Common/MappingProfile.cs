@@ -2,9 +2,11 @@
 using Profiles.API.Dtos;
 using Profiles.API.Dtos.Doctors;
 using Profiles.API.Dtos.Patients;
+using Profiles.API.Dtos.Receptionists;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
 using Profiles.BLL.Models.Patients;
+using Profiles.BLL.Models.Receptionists;
 
 namespace Profiles.API.Common;
 
@@ -25,6 +27,9 @@ public sealed class MappingProfile : Profile
 
         // Patient mappings
         CreateMap<PatientDto, PatientModel>().ReverseMap();
+
+        // Receptionist mappings
+        CreateMap<ReceptionistDto, ReceptionistModel>().ReverseMap();
 
         // Pagination mappings
         CreateMap<PaginationParametersDto, PaginationParametersModel>();
