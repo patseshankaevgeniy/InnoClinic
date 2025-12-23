@@ -12,7 +12,7 @@ public static class BusinessLayerServiceRegister
     public static IServiceCollection RegisterBusinessLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.RegisterDataLayerDependencies(configuration);
-        
+
         // Register BLL services
         services.AddScoped<IDoctorsService, DoctorsService>();
         services.AddScoped<IPatientService, PatientService>();
@@ -20,9 +20,6 @@ public static class BusinessLayerServiceRegister
 
         // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-
-
 
         return services;
     }
