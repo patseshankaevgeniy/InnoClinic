@@ -10,11 +10,7 @@ namespace Services.BLL.Services
     {
         public async Task<SpecializationModel> CreateAsync(CreatedSpecializationModel createdModel, CancellationToken cancellationToken = default)
         {
-            var newSpecialization = await specRepository.FindAsync(createdModel.Name, cancellationToken: cancellationToken);
-            if (newSpecialization is not null)
-            {
-                throw new InvalidOperationException($"Specialization with name {createdModel.Name} already exists.");
-            }
+            var newSpecialization = await CheckSpecialization(specializationName: createdModel.Name, cancellationToken: cancellationToken);
 
             newSpecialization = await specRepository.CreateAsync(mapper.Map<Specialization>(createdModel), cancellationToken: cancellationToken);
 
@@ -23,18 +19,14 @@ namespace Services.BLL.Services
 
         public async Task DeleteAsync(Guid specializationId, CancellationToken cancellationToken = default)
         {
-            var specialization = await specRepository.GetAsync(specializationId, cancellationToken: cancellationToken);
-            if (specialization is null)
-            {
-                throw new KeyNotFoundException($"Specialization with Id {specializationId} not found.");
-            }
+            var specialization = await CheckSpecialization(id: specializationId, cancellationToken: cancellationToken);
 
             await specRepository.DeleteAsync(specialization, cancellationToken);
         }
 
         public async Task<SpecializationModel> FindByNameAsync(string specializationName, CancellationToken cancellationToken = default)
         {
-            var specialization = await specRepository.FindAsync(specializationName, cancellationToken: cancellationToken);
+            var specialization = await CheckSpecialization(specializationName: specializationName, cancellationToken: cancellationToken);
 
             return mapper.Map<SpecializationModel>(specialization);
         }
@@ -47,24 +39,44 @@ namespace Services.BLL.Services
 
         public async Task<SpecializationModel> GetAsync(Guid specializationId, CancellationToken cancellationToken = default)
         {
-            var specialization = await specRepository.GetAsync( specializationId, cancellationToken: cancellationToken);
+            var specialization = await CheckSpecialization(id: specializationId, cancellationToken: cancellationToken);
             return mapper.Map<SpecializationModel>(specialization);
         }
 
         public async Task<SpecializationModel> UpdateAsync(UpdatedSpecializationModel updatedModel, CancellationToken cancellationToken = default)
         {
-            var updatedSpecialization = await specRepository.GetAsync(updatedModel.Id, cancellationToken: cancellationToken);
-
-            if (updatedSpecialization is null)
-            {
-                throw new KeyNotFoundException($"Specialization with Id {updatedModel.Id} not found.");
-            }
+            var updatedSpecialization = await CheckSpecialization(id: updatedModel.Id, cancellationToken: cancellationToken);
 
             updatedSpecialization.Name = updatedModel.Name;
 
             updatedSpecialization = await specRepository.UpdateAsync(updatedSpecialization, cancellationToken: cancellationToken);
 
             return mapper.Map<SpecializationModel>(updatedSpecialization);
+        }
+
+        private async Task<Specialization> CheckSpecialization(Guid? id = null, string? specializationName = null, CancellationToken cancellationToken = default)
+        {
+            if (id.HasValue && id.Value != Guid.Empty)
+            {
+                var checkedSpecialization = await specRepository.GetAsync(id.Value, cancellationToken);
+                if (checkedSpecialization is null)
+                {
+                    throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
+                }
+                return checkedSpecialization;
+            }
+
+            if (!string.IsNullOrWhiteSpace(specializationName))
+            {
+                var checkedSpecialization = await specRepository.FindAsync(specializationName, cancellationToken);
+                if (checkedSpecialization is null)
+                {
+                    throw new InvalidOperationException($"Procedure with name '{specializationName}' does not exist.");
+                }
+                return checkedSpecialization;
+            }
+
+            throw new ArgumentException("Either id or procedureName must be provided.");
         }
     }
 }

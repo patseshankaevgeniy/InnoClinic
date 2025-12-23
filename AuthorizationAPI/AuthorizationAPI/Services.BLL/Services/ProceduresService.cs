@@ -10,17 +10,9 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 {
     public async Task<ProcedureModel> CreateAsync(CreatedProcedureModel createdModel, CancellationToken cancellationToken = default)
     {
-        var checkedProcedure = await proceduresRepository.FindAsync(createdModel.Name, cancellationToken);
-        if (checkedProcedure is not null)
-        {
-            throw new InvalidOperationException($"Procedure with name '{createdModel.Name}' already exists.");
-        }
+        var checkedProcedure = await CheckProcedure(procedureName: createdModel.Name, cancellationToken: cancellationToken);
 
         var checkedSpecialization = await specializationsService.FindByNameAsync(createdModel.SpecializationName, cancellationToken);
-        if (checkedSpecialization is null)
-        {
-            throw new InvalidOperationException($"Specialization with name '{createdModel.SpecializationName}' does not exist.");
-        }
 
         var newProcedure = mapper.Map<Procedure>(createdModel);
         newProcedure.SpecializationId = checkedSpecialization.Id;
@@ -32,11 +24,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     public async Task<ProcedureModel> FindByNameAsync(string procedureName, CancellationToken cancellationToken = default)
     {
-        var procedure = await proceduresRepository.FindAsync(procedureName, cancellationToken);
-        if (procedure is not null)
-        {
-            throw new InvalidOperationException($"Procedure with name '{procedureName}' already exists.");
-        }
+        var procedure = await CheckProcedure(procedureName: procedureName, cancellationToken: cancellationToken);
 
         return mapper.Map<ProcedureModel>(procedure);
     }
@@ -50,22 +38,15 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     public async Task<ProcedureModel> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var procedure = await proceduresRepository.GetAsync(id, cancellationToken);
-        if (procedure is null)
-        {
-            throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
-        }
+        var procedure = await CheckProcedure(id, cancellationToken: cancellationToken);
 
         return mapper.Map<ProcedureModel>(procedure);
     }
 
     public async Task<ProcedureModel> UpdateAsync(UpdatedProcedureModel updatedModel, CancellationToken cancellationToken = default)
     {
-        var updatedProcedure = await proceduresRepository.GetAsync(updatedModel.Id, cancellationToken);
-        if (updatedProcedure is null)
-        {
-            throw new InvalidOperationException($"Procedure with id '{updatedModel.Id}' does not exist.");
-        }
+        var updatedProcedure = await CheckProcedure(updatedModel.Id, cancellationToken: cancellationToken);
+
         mapper.Map(updatedModel, updatedProcedure);
 
         var procedure = await proceduresRepository.UpdateAsync(updatedProcedure, cancellationToken);
@@ -75,12 +56,33 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var deletedProcedure = await proceduresRepository.GetAsync(id, cancellationToken);
-        if (deletedProcedure is null)
-        {
-            throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
-        }
+        var deletedProcedure = await CheckProcedure(id, cancellationToken: cancellationToken);
 
         await proceduresRepository.DeleteAsync(deletedProcedure, cancellationToken);
+    }
+
+    private async Task<Procedure> CheckProcedure(Guid? id = null, string? procedureName = null, CancellationToken cancellationToken = default)
+    {
+        if (id.HasValue && id.Value != Guid.Empty)
+        {
+            var checkedProcedure = await proceduresRepository.GetAsync(id.Value, cancellationToken);
+            if (checkedProcedure is null)
+            {
+                throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
+            }
+            return checkedProcedure;
+        }
+
+        if (!string.IsNullOrWhiteSpace(procedureName))
+        {
+            var checkedProcedure = await proceduresRepository.FindAsync(procedureName, cancellationToken);
+            if (checkedProcedure is null)
+            {
+                throw new InvalidOperationException($"Procedure with name '{procedureName}' does not exist.");
+            }
+            return checkedProcedure;
+        }
+
+        throw new ArgumentException("Either id or procedureName must be provided.");
     }
 }
