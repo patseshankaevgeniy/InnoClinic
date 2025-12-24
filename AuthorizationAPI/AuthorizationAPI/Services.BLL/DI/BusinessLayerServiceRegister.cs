@@ -20,8 +20,6 @@ public static class BusinessLayerServiceRegister
         // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        // Register Validators
-
         return services;
     }
 }

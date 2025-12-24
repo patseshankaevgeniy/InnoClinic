@@ -16,7 +16,6 @@ public class ProceduresController(IProceduresService proceduresService, IMapper 
     public async Task<ProcedureDto> CreateAsync(CreatedProcedureDto newProcedureDto)
     {
         var newProcedureModel = await proceduresService.CreateAsync(mapper.Map<CreatedProcedureModel>(newProcedureDto));
-
         return mapper.Map<ProcedureDto>(newProcedureModel);
     }
 
@@ -35,7 +34,7 @@ public class ProceduresController(IProceduresService proceduresService, IMapper 
     }
 
     [HttpPut(RouteConstants.UpdateRoute)]
-    public async Task<ProcedureDto> UpdateAsync(UpdatedSpecializationDto updatedProcedureDto)
+    public async Task<ProcedureDto> UpdateAsync(ProcedureDto updatedProcedureDto)
     {
         var updatedProcedureModel = await proceduresService.UpdateAsync(mapper.Map<UpdatedProcedureModel>(updatedProcedureDto));
         return mapper.Map<ProcedureDto>(updatedProcedureModel);

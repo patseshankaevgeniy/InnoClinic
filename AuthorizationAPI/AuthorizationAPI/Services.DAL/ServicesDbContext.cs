@@ -27,6 +27,7 @@ public class ServicesDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServicesDbContext).Assembly);
     }
+
     private void ApplyTimeStamps()
     {
         var entries = ChangeTracker.Entries()

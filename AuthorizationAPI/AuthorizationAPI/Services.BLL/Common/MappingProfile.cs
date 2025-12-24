@@ -21,8 +21,5 @@ public sealed class MappingProfile : Profile
             .ReverseMap();
         CreateMap<CreatedSpecializationModel, Specialization>().ReverseMap();
         CreateMap<UpdatedSpecializationModel, Specialization>().ReverseMap();
-
-        // Pagination mappings
-        // CreateMap<PaginationParametersModel, PaginationParameters>();
     }
 }

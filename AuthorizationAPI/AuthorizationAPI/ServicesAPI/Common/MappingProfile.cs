@@ -16,8 +16,10 @@ public sealed class MappingProfile : Profile
         CreateMap<CreatedSpecializationDto, CreatedSpecializationModel>()
             .ReverseMap();
 
+        // Procedure mappings
         CreateMap<CreatedProcedureDto,CreatedProcedureModel>().ReverseMap();
         CreateMap<ProcedureDto,ProcedureModel>().ReverseMap();
+        CreateMap<ProcedureDto,UpdatedProcedureModel>().ReverseMap();
     }
 }
 

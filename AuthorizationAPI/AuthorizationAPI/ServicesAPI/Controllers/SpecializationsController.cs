@@ -15,7 +15,6 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<SpecializationDto> CreateAsync(CreatedSpecializationDto newSpecializationDto)
     {
         var newSpecializationModel = await specializationsService.CreateAsync(mapper.Map<CreatedSpecializationModel>(newSpecializationDto));
-
         return mapper.Map<SpecializationDto>(newSpecializationModel);
     }
 

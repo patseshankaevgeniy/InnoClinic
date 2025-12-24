@@ -63,7 +63,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     private async Task<Procedure> CheckProcedure(Guid id, CancellationToken cancellationToken = default)
     {
-        var checkedProcedure = await proceduresRepository.GetAsync(id, cancellationToken);
+        var checkedProcedure = await proceduresRepository.GetByIdAsync(id, cancellationToken);
         if (checkedProcedure is null)
         {
             throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
