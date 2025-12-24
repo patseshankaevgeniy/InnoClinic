@@ -10,7 +10,7 @@ namespace Services.BLL.Services
     {
         public async Task<SpecializationModel> CreateAsync(CreatedSpecializationModel createdModel, CancellationToken cancellationToken = default)
         {
-            var newSpecialization = await CheckSpecialization(specializationName: createdModel.Name, cancellationToken: cancellationToken);
+            var newSpecialization = await CheckSpecialization(createdModel.Name, cancellationToken: cancellationToken);
 
             newSpecialization = await specRepository.CreateAsync(mapper.Map<Specialization>(createdModel), cancellationToken: cancellationToken);
 
@@ -19,7 +19,7 @@ namespace Services.BLL.Services
 
         public async Task DeleteAsync(Guid specializationId, CancellationToken cancellationToken = default)
         {
-            var specialization = await CheckSpecialization(id: specializationId, cancellationToken: cancellationToken);
+            var specialization = await CheckSpecialization(specializationId, cancellationToken: cancellationToken);
 
             await specRepository.DeleteAsync(specialization, cancellationToken);
         }
@@ -45,7 +45,7 @@ namespace Services.BLL.Services
 
         public async Task<SpecializationModel> UpdateAsync(UpdatedSpecializationModel updatedModel, CancellationToken cancellationToken = default)
         {
-            var updatedSpecialization = await CheckSpecialization(id: updatedModel.Id, cancellationToken: cancellationToken);
+            var updatedSpecialization = await CheckSpecialization(updatedModel.Id, cancellationToken: cancellationToken);
 
             updatedSpecialization.Name = updatedModel.Name;
 
@@ -54,29 +54,24 @@ namespace Services.BLL.Services
             return mapper.Map<SpecializationModel>(updatedSpecialization);
         }
 
-        private async Task<Specialization> CheckSpecialization(Guid? id = null, string? specializationName = null, CancellationToken cancellationToken = default)
+        private async Task<Specialization> CheckSpecialization(Guid id, CancellationToken cancellationToken = default)
         {
-            if (id.HasValue && id.Value != Guid.Empty)
+            var checkedSpecialization = await specRepository.GetAsync(id, cancellationToken);
+            if (checkedSpecialization is null)
             {
-                var checkedSpecialization = await specRepository.GetAsync(id.Value, cancellationToken);
-                if (checkedSpecialization is null)
-                {
-                    throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
-                }
-                return checkedSpecialization;
+                throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
             }
+            return checkedSpecialization;
+        }
 
-            if (!string.IsNullOrWhiteSpace(specializationName))
+        private async Task<Specialization> CheckSpecialization(string specializationName, CancellationToken cancellationToken = default)
+        {
+            var checkedSpecialization = await specRepository.FindAsync(specializationName, cancellationToken);
+            if (checkedSpecialization is null)
             {
-                var checkedSpecialization = await specRepository.FindAsync(specializationName, cancellationToken);
-                if (checkedSpecialization is null)
-                {
-                    throw new InvalidOperationException($"Procedure with name '{specializationName}' does not exist.");
-                }
-                return checkedSpecialization;
+                throw new InvalidOperationException($"Procedure with name '{specializationName}' does not exist.");
             }
-
-            throw new ArgumentException("Either id or procedureName must be provided.");
+            return checkedSpecialization;
         }
     }
 }

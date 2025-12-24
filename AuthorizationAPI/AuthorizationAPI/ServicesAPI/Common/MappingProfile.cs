@@ -18,9 +18,6 @@ public sealed class MappingProfile : Profile
 
         CreateMap<CreatedProcedureDto,CreatedProcedureModel>().ReverseMap();
         CreateMap<ProcedureDto,ProcedureModel>().ReverseMap();
-
-        // Pagination mappings
-        //        CreateMap<PaginationParametersDto, PaginationParametersModel>();
     }
 }
 
