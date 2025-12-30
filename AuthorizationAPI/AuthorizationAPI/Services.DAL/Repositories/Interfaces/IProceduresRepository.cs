@@ -2,12 +2,8 @@
 
 namespace Services.DAL.Repositories.Interfaces;
 
-public interface IProceduresRepository
+public interface IProceduresRepository : IGenericRepository<Procedure>
 {
-    Task<List<Procedure>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<Procedure?> GetAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Procedure?> FindAsync(string procedureName, CancellationToken cancellationToken = default);
-    Task<Procedure> CreateAsync(Procedure newProcedure, CancellationToken cancellationToken = default);
-    Task<Procedure> UpdateAsync(Procedure updatedProcedure, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Procedure deletedProcedure, CancellationToken cancellationToken = default);
+    new Task<Procedure?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<Procedure?> FindAsync(string procedureName, bool asNoTracking = default, CancellationToken cancellationToken = default);
 }

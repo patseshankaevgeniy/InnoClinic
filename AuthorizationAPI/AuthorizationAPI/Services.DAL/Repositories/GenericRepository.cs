@@ -16,29 +16,30 @@ public class GenericRepository<TEntity>(ServicesDbContext db) : IGenericReposito
         return createdEntity;
     }
 
-    public async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<List<TEntity>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
-        return await _entities
-            .AsNoTracking()
+        return await GetQuery(asNoTracking)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
-        return await _entities
-            .AsNoTracking()
+        return await GetQuery(asNoTracking)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity updatedEntity, CancellationToken cancellationToken)
+    public async Task<TEntity> UpdateAsync(TEntity updatedEntity, CancellationToken cancellationToken = default)
     {
         _entities.Update(updatedEntity);
         await db.SaveChangesAsync(cancellationToken);
         return updatedEntity;
     }
-    public async Task DeleteAsync(TEntity deletedEntity, CancellationToken cancellationToken)
+    public async Task DeleteAsync(TEntity deletedEntity, CancellationToken cancellationToken = default)
     {
         _entities.Remove(deletedEntity);
         await db.SaveChangesAsync(cancellationToken);
     }
+
+    private IQueryable<TEntity> GetQuery(bool asNoTracking) =>
+        asNoTracking ? _entities.AsNoTracking() : _entities;
 }

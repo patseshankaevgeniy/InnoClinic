@@ -6,18 +6,21 @@ namespace Services.DAL.Repositories;
 
 public class SpecializationsRepository(ServicesDbContext db) : GenericRepository<Specialization>(db), ISpecializationsRepository
 {
-    private readonly ServicesDbContext _db = db;
     private readonly DbSet<Specialization> _specializations = db.Set<Specialization>();
 
-    public async Task<Specialization?> GetAsync(Guid id, CancellationToken cancellationToken)
+    public async new Task<Specialization?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
-        return await _specializations
-            .Include(x => x.Procedures).FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+        return await GetQuery(asNoTracking)
+            .Include(x => x.Procedures)
+            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
-    public async Task<Specialization?> FindAsync(string specializationName, CancellationToken cancellationToken)
+    public async Task<Specialization?> FindAsync(string specializationName, bool asNoTracking = default, CancellationToken cancellationToken = default)
     {
-        return await _specializations
+        return await GetQuery(asNoTracking)
             .FirstOrDefaultAsync(s => s.Name == specializationName, cancellationToken);
     }
+
+    private IQueryable<Specialization> GetQuery(bool asNoTracking) =>
+        asNoTracking ? _specializations.AsNoTracking() : _specializations;
 }

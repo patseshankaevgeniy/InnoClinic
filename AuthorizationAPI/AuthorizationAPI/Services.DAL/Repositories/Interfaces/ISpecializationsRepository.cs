@@ -2,12 +2,8 @@
 
 namespace Services.DAL.Repositories.Interfaces;
 
-public interface ISpecializationsRepository
+public interface ISpecializationsRepository : IGenericRepository<Specialization>
 {
-    Task<List<Specialization>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<Specialization?> GetAsync(Guid specializationId, CancellationToken cancellationToken = default);
-    Task<Specialization?> FindAsync(string specializationName, CancellationToken cancellationToken = default);
-    Task<Specialization> CreateAsync(Specialization newSpecialization, CancellationToken cancellationToken = default);
-    Task<Specialization> UpdateAsync(Specialization updatedSpecialization, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Specialization deletedSpecialization, CancellationToken cancellationToken = default);
+    new Task<Specialization?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<Specialization?> FindAsync(string specializationName, bool disableTracking = default, CancellationToken cancellationToken = default);
 }

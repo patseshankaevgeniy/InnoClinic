@@ -15,7 +15,7 @@ public static class DataLayerServiceRegister
             options.UseSqlServer(configuration.GetConnectionString("ServicesDbConnection"));
         });
 
-        services.AddScoped<ISpecializationsRepository, SpecializationsRepository>();
-        services.AddScoped<IProceduresRepository, ProceduresRepository>();
+        services.AddScoped<ISpecializationsRepository, SpecializationsRepository>()
+                .AddScoped<IProceduresRepository, ProceduresRepository>();
     }
 }

@@ -8,10 +8,10 @@ public static class ApplicationLayerServiceRegister
 {
     public static IServiceCollection RegisterApplicationLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton(TimeProvider.System);
-        services.RegisterBusinessLayerDependencies(configuration);
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddHttpContextAccessor();
+        services.AddSingleton(TimeProvider.System)
+                .RegisterBusinessLayerDependencies(configuration)
+                .AddAutoMapper(Assembly.GetExecutingAssembly())
+                .AddHttpContextAccessor();
 
         services.AddSwaggerGen(options =>
         {

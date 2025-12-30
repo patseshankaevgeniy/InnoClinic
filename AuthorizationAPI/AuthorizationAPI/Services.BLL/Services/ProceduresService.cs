@@ -10,7 +10,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 {
     public async Task<ProcedureModel> CreateAsync(CreatedProcedureModel createdModel, CancellationToken cancellationToken = default)
     {
-        var checkedProcedure = await CheckProcedure(procedureName: createdModel.Name, cancellationToken: cancellationToken);
+        var checkedProcedure = await CheckProcedure(createdModel.Name, cancellationToken: cancellationToken);
 
         var checkedSpecialization = await specializationsService.FindByNameAsync(createdModel.SpecializationName, cancellationToken);
 
@@ -24,7 +24,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     public async Task<ProcedureModel> FindByNameAsync(string procedureName, CancellationToken cancellationToken = default)
     {
-        var procedure = await CheckProcedure(procedureName: procedureName, cancellationToken: cancellationToken);
+        var procedure = await CheckProcedure(procedureName, cancellationToken: cancellationToken);
 
         return mapper.Map<ProcedureModel>(procedure);
     }

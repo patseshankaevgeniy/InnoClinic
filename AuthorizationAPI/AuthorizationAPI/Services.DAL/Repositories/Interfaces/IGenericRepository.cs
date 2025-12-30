@@ -4,9 +4,9 @@ namespace Services.DAL.Repositories.Interfaces;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-    Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
-    Task<TEntity> CreateAsync(TEntity createdEntity, CancellationToken cancellationToken);
-    Task<TEntity> UpdateAsync(TEntity updatedEntity, CancellationToken cancellationToken);
-    Task DeleteAsync(TEntity deletedEntity, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<List<TEntity>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<TEntity> CreateAsync(TEntity createdEntity, CancellationToken cancellationToken = default);
+    Task<TEntity> UpdateAsync(TEntity updatedEntity, CancellationToken cancellationToken = default);
+    Task DeleteAsync(TEntity deletedEntity, CancellationToken cancellationToken = default);
 }
