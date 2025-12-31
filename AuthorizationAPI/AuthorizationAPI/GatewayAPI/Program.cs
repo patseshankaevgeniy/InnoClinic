@@ -15,13 +15,10 @@ builder.Services.AddAuthentication()
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Auth:Key"]!)),
-
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Auth:Issuer"],
-
             ValidateAudience = true,
             ValidAudience = builder.Configuration["Auth:Issuer"],
-
             ValidateLifetime = true,
             ClockSkew = TimeSpan.FromMinutes(10)
         };
