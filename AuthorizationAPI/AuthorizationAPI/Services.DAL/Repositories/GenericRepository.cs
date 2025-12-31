@@ -28,6 +28,12 @@ public class GenericRepository<TEntity>(ServicesDbContext db) : IGenericReposito
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
+    public async Task<TEntity?> FindAsync(string name, bool asNoTracking = default, CancellationToken cancellationToken = default)
+    {
+        return await GetQuery(asNoTracking)
+            .FirstOrDefaultAsync(s => EF.Functions.Like(s.Name, name), cancellationToken);
+    }
+
     public async Task<TEntity> UpdateAsync(TEntity updatedEntity, CancellationToken cancellationToken = default)
     {
         _entities.Update(updatedEntity);

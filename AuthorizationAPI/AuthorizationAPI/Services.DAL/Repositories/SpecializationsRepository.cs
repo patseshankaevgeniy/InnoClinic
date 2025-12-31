@@ -15,12 +15,6 @@ public class SpecializationsRepository(ServicesDbContext db) : GenericRepository
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
-    public async Task<Specialization?> FindAsync(string specializationName, bool asNoTracking = default, CancellationToken cancellationToken = default)
-    {
-        return await GetQuery(asNoTracking)
-            .FirstOrDefaultAsync(s => s.Name == specializationName, cancellationToken);
-    }
-
     private IQueryable<Specialization> GetQuery(bool asNoTracking) =>
         asNoTracking ? _specializations.AsNoTracking() : _specializations;
 }

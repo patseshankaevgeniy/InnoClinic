@@ -8,17 +8,18 @@ public class ProceduresRepository(ServicesDbContext db) : GenericRepository<Proc
 {
     private readonly DbSet<Procedure> _procedures = db.Set<Procedure>();
 
-    public async Task<Procedure?> FindAsync(string procedureName, bool asNoTracking = default, CancellationToken cancellationToken = default)
-    {
-        return await GetQuery(asNoTracking)
-            .FirstOrDefaultAsync(s => s.Name == procedureName, cancellationToken);
-    }
-
     public async new Task<Procedure?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
         return await GetQuery(asNoTracking)
             .Include(x => x.Specialization)
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+    }
+
+    public async Task<List<Procedure>> GetBySpecializationIdAsync(Guid specializationId, bool asNoTracking = true, CancellationToken cancellationToken = default)
+    {
+        return await GetQuery(asNoTracking)
+            .Where(s => s.SpecializationId == specializationId)
+            .ToListAsync(cancellationToken);
     }
 
     private IQueryable<Procedure> GetQuery(bool asNoTracking) =>
