@@ -32,7 +32,6 @@ builder.Services.AddOcelot(builder.Configuration)
 
 var app = builder.Build();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
 
