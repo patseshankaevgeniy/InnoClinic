@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.API", "Authorization.API\Authorization.API.csproj", "{EB5F2939-5199-4B9C-87C3-8E2779EA8508}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profiles.DAL", "Profiles.DAL\Profiles.DAL.csproj", "{D172537F-6E21-E0F8-03ED-A6412A8E7B85}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProfilesApi", "ProfilesApi", "{66D6ABCD-33B3-4D46-9E1D-62FA4B2ED062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayAPI", "GatewayAPI\GatewayAPI.csproj", "{703A4743-4E9F-451A-AEED-95EEADBAF884}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{D172537F-6E21-E0F8-03ED-A6412A8E7B85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D172537F-6E21-E0F8-03ED-A6412A8E7B85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D172537F-6E21-E0F8-03ED-A6412A8E7B85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
