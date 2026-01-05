@@ -1,6 +1,6 @@
 ﻿namespace Services.DAL.Entities;
 
-public class Procedure : BaseEntity
+public class Procedure : CatalogEntity
 {
     public decimal Price { get; set; }
     public Guid SpecializationId { get; set; }

@@ -56,7 +56,7 @@ namespace Services.BLL.Services
 
         private async Task<Specialization> CheckSpecialization(Guid id, CancellationToken cancellationToken = default)
         {
-            var checkedSpecialization = await specRepository.GetByIdAsync(id, cancellationToken);
+            var checkedSpecialization = await specRepository.GetByIdAsync(id, cancellationToken: cancellationToken);
             if (checkedSpecialization is null)
             {
                 throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
@@ -66,7 +66,7 @@ namespace Services.BLL.Services
 
         private async Task<Specialization> CheckSpecialization(string specializationName, CancellationToken cancellationToken = default)
         {
-            var checkedSpecialization = await specRepository.FindAsync(specializationName, cancellationToken);
+            var checkedSpecialization = await specRepository.FindAsync(specializationName, cancellationToken: cancellationToken);
             if (checkedSpecialization is null)
             {
                 throw new InvalidOperationException($"Procedure with name '{specializationName}' does not exist.");

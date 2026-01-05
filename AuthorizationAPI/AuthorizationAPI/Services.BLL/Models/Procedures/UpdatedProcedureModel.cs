@@ -1,6 +1,10 @@
 ﻿namespace Services.BLL.Models.Procedures;
 
-public class UpdatedProcedureModel : BaseModel
+public class UpdatedProcedureModel
 {
-    public required decimal Price{ get; set; }
+    public Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required bool Status { get; set; }
+    public required string SpecializationName { get; set; }
+    public required decimal Price { get; set; }
 }

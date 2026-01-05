@@ -2,7 +2,7 @@
 
 namespace Services.DAL.Repositories.Interfaces;
 
-public interface IGenericRepository<TEntity> where TEntity : BaseEntity
+public interface IGenericRepository<TEntity> where TEntity : CatalogEntity
 {
     Task<TEntity?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default);
     Task<List<TEntity>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default);

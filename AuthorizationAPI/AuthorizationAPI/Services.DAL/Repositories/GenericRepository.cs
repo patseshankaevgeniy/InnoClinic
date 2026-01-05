@@ -4,7 +4,7 @@ using Services.DAL.Repositories.Interfaces;
 
 namespace Services.DAL.Repositories;
 
-public class GenericRepository<TEntity>(ServicesDbContext db) : IGenericRepository<TEntity> where TEntity : BaseEntity
+public class GenericRepository<TEntity>(ServicesDbContext db) : IGenericRepository<TEntity> where TEntity : CatalogEntity
 {
     private readonly DbSet<TEntity> _entities = db.Set<TEntity>();
 

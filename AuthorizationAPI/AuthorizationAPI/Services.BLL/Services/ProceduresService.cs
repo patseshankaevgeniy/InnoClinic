@@ -31,7 +31,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     public async Task<List<ProcedureModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var procedures = await proceduresRepository.GetAllAsync(cancellationToken);
+        var procedures = await proceduresRepository.GetAllAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<ProcedureModel>>(procedures);
     }
@@ -63,7 +63,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     private async Task<Procedure> CheckProcedure(Guid id, CancellationToken cancellationToken = default)
     {
-        var checkedProcedure = await proceduresRepository.GetByIdAsync(id, cancellationToken);
+        var checkedProcedure = await proceduresRepository.GetByIdAsync(id, cancellationToken: cancellationToken);
         if (checkedProcedure is null)
         {
             throw new InvalidOperationException($"Procedure with id '{id}' does not exist.");
@@ -73,7 +73,7 @@ public class ProceduresService(IProceduresRepository proceduresRepository, ISpec
 
     private async Task<Procedure> CheckProcedure(string procedureName, CancellationToken cancellationToken = default)
     {
-        var checkedProcedure = await proceduresRepository.FindAsync(procedureName, cancellationToken);
+        var checkedProcedure = await proceduresRepository.FindAsync(procedureName, cancellationToken: cancellationToken);
         if (checkedProcedure is null)
         {
             throw new InvalidOperationException($"Procedure with name '{procedureName}' does not exist.");
