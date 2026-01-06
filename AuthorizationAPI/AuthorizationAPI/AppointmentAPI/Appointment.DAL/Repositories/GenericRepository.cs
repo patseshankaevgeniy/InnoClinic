@@ -18,8 +18,14 @@ public class GenericRepository<TEntity>(AppointmentsDbContext db) : IGenericRepo
 
     public async Task<TEntity?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default)
     {
-        var entities = await _entities.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-        return entities;
+        IQueryable<TEntity> query = _entities;
+
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)

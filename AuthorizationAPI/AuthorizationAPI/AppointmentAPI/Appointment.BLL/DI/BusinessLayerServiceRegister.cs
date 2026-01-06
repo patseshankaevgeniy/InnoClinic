@@ -1,9 +1,9 @@
 ﻿using Appointment.BLL.Services;
 using Appointment.BLL.Services.Interfaces;
+using Appointment.DAL.DI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Appointment.DAL.DI;
 
 namespace Appointment.BLL.DI;
 

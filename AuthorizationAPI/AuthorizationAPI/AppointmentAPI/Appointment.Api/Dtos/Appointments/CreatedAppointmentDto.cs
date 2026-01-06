@@ -2,5 +2,5 @@
 
 public class CreatedAppointmentDto
 {
-    public DateTime AppointmentDate { get; set; }
+    public required DateTime AppointmentDate { get; set; }
 }
