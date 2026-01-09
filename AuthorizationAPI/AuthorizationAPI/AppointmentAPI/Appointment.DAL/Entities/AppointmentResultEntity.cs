@@ -9,5 +9,5 @@ public class AppointmentResultEntity : BaseEntity
     public required string Recommendations { get; set; }
     public required Guid AppointmentId { get; set; }
 
-    public AppointmentEntity? Appointment { get; set; }
+    public required AppointmentEntity Appointment { get; set; }
 }

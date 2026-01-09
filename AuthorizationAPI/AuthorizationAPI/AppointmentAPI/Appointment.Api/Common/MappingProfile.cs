@@ -10,7 +10,7 @@ public sealed class MappingProfile : Profile
     {
         // Appoint mappings
         CreateMap<AppointmentDto, AppointmentModel>().ReverseMap();
-        CreateMap<CreatedAppointmentDto, CreatedAppointmentModel>().ReverseMap();
-        CreateMap<UpdatedAppointmentDto, UpdatedAppointmentModel>().ReverseMap();
+        CreateMap<CreatedAppointmentDto, CreatedAppointmentModel>();
+        CreateMap<UpdatedAppointmentDto, UpdatedAppointmentModel>();
     }
 }

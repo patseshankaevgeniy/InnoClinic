@@ -8,18 +8,22 @@ public class AppointmentsRepository(AppointmentsDbContext db) : GenericRepositor
 {
     private readonly DbSet<AppointmentEntity> appointments = db.Set<AppointmentEntity>();
 
-    public Task<List<AppointmentEntity>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AppointmentEntity>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = true)
     {
-        return GetQuery(asNoTracking).ToListAsync(cancellationToken);
+        return await GetQuery(asNoTracking).ToListAsync(cancellationToken);
     }
 
-    public Task<List<AppointmentEntity>> GetByDateAsync(DateTime filterDate, bool isDescending, bool asNoTracking = true, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AppointmentEntity>> GetByDateAsync(DateTime filterDate, bool isDescending, CancellationToken cancellationToken, bool asNoTracking = true)
     {
         var query = GetQuery(asNoTracking)
-                        .Where(a => a.AppointmentDate >= filterDate)
-                        .OrderByDescending(a => a.AppointmentDate);
+                       .Where(a => a.AppointmentDate.Date == filterDate.Date);
 
-        return query.ToListAsync(cancellationToken);
+        if (isDescending)
+        {
+            query = query.OrderByDescending(a => a.AppointmentDate);
+        }
+
+        return await query.ToListAsync(cancellationToken);
     }
 
     private IQueryable<AppointmentEntity> GetQuery(bool asNoTracking) =>

@@ -4,6 +4,6 @@ namespace Appointment.DAL.Repositories.Interfaces;
 
 public interface IAppointmentsRepository : IGenericRepository<AppointmentEntity>
 {
-    Task<List<AppointmentEntity>> GetAllAsync(bool asNoTracking = true, CancellationToken cancellationToken = default);
-    Task<List<AppointmentEntity>> GetByDateAsync(DateTime filterStartDate, bool isDescending, bool asNoTracking = true, CancellationToken cancellationToken = default);
+    Task<IEnumerable<AppointmentEntity>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = true);
+    Task<IEnumerable<AppointmentEntity>> GetByDateAsync(DateTime filterDate, bool isDescending, CancellationToken cancellationToken, bool asNoTracking = true);
 }

@@ -8,7 +8,7 @@ public class GenericRepository<TEntity>(AppointmentsDbContext db) : IGenericRepo
 {
     private readonly DbSet<TEntity> _entities = db.Set<TEntity>();
 
-    public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken)
     {
         _entities.Add(entity);
         await db.SaveChangesAsync(cancellationToken);
@@ -16,7 +16,7 @@ public class GenericRepository<TEntity>(AppointmentsDbContext db) : IGenericRepo
         return entity;
     }
 
-    public async Task<TEntity?> GetByIdAsync(Guid id, bool asNoTracking = true, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool asNoTracking = true)
     {
         IQueryable<TEntity> query = _entities;
 
@@ -28,7 +28,7 @@ public class GenericRepository<TEntity>(AppointmentsDbContext db) : IGenericRepo
         return await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
         _entities.Update(entity);
         await db.SaveChangesAsync(cancellationToken);
@@ -36,7 +36,7 @@ public class GenericRepository<TEntity>(AppointmentsDbContext db) : IGenericRepo
         return entity;
     }
 
-    public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
     {
         _entities.Remove(entity);
         await db.SaveChangesAsync(cancellationToken);
