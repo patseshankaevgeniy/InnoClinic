@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 using Profiles.API.Common.Validators.Doctors;
-using Profiles.API.Dtos;
 using Profiles.BLL.DI;
 using System.Reflection;
 
@@ -13,6 +12,17 @@ public static class ApplicationLayerServiceRegister
     public static IServiceCollection RegisterApplicationLayerDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
+
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Authorization API",
+                Description = "An ASP.NET Core Web API",
+            });
+        });
+
         services.AddSingleton(TimeProvider.System);
 
         services.AddFluentValidationAutoValidation();

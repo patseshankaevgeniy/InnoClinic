@@ -38,6 +38,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.BLL", "Services.BLL\Services.BLL.csproj", "{2EC7CD8D-985F-712E-BC4D-6625CCED0584}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.DAL", "Services.DAL\Services.DAL.csproj", "{528F4A62-6433-C59D-8D33-056C60F6E8E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayAPI", "GatewayAPI\GatewayAPI.csproj", "{703A4743-4E9F-451A-AEED-95EEADBAF884}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +94,10 @@ Global
 		{528F4A62-6433-C59D-8D33-056C60F6E8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{528F4A62-6433-C59D-8D33-056C60F6E8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{528F4A62-6433-C59D-8D33-056C60F6E8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{703A4743-4E9F-451A-AEED-95EEADBAF884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

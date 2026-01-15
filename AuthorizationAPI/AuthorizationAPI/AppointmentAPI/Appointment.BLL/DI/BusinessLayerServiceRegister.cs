@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Appointment.BLL.Services;
+using Appointment.BLL.Services.Interfaces;
+using Appointment.DAL.DI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Profiles.BLL.Services;
-using Profiles.BLL.Services.Interfaces;
-using Profiles.DAL.DI;
 using System.Reflection;
 
-namespace Profiles.BLL.DI;
+namespace Appointment.BLL.DI;
 
 public static class BusinessLayerServiceRegister
 {
@@ -14,9 +14,7 @@ public static class BusinessLayerServiceRegister
         services.RegisterDataLayerDependencies(configuration);
 
         // Register BLL services
-        services.AddScoped<IDoctorsService, DoctorsService>();
-        services.AddScoped<IPatientService, PatientService>();
-        services.AddScoped<IReceptionistsService, ReceptionistsService>();
+        services.AddScoped<IAppointmentsService, AppointmentsService>();
 
         // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
