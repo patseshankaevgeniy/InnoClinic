@@ -15,6 +15,7 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<SpecializationDto> CreateAsync(CreatedSpecializationDto newSpecializationDto)
     {
         var newSpecializationModel = await specializationsService.CreateAsync(mapper.Map<CreatedSpecializationModel>(newSpecializationDto));
+
         return mapper.Map<SpecializationDto>(newSpecializationModel);
     }
 
@@ -22,6 +23,7 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<List<SpecializationDto>> GetAllAsync()
     {
         var specializationModels = await specializationsService.GetAllAsync();
+
         return specializationModels.Select(model => mapper.Map<SpecializationDto>(model)).ToList();
     }
 
@@ -29,6 +31,7 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<SpecializationDto> GetAsync(Guid id)
     {
         var specializationModel = await specializationsService.GetAsync(id);
+
         return mapper.Map<SpecializationDto>(specializationModel);
     }
 
@@ -36,6 +39,7 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<ActionResult> DeleteAsync(Guid id)
     {
         await specializationsService.DeleteAsync(id);
+
         return NoContent();
     }
 
@@ -43,6 +47,7 @@ public class SpecializationsController(ISpecializationsService specializationsSe
     public async Task<SpecializationDto> UpdateAsync(UpdatedSpecializationDto updatedSpecializationDto)
     {
         var updatedSpecializationModel = await specializationsService.UpdateAsync(mapper.Map<UpdatedSpecializationModel>(updatedSpecializationDto));
+
         return mapper.Map<SpecializationDto>(updatedSpecializationModel);
     }
 }

@@ -9,14 +9,12 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Procedure mappings
         CreateMap<CreatedProcedureModel, Procedure>();
         CreateMap<UpdatedProcedureModel, Procedure>();
         CreateMap<Procedure, ProcedureModel>()
             .ForMember(p => p.SpecializationName, x => x.MapFrom(s => s.Specialization.Name))
             .ReverseMap();
 
-        // Specialization mappings
         CreateMap<Specialization, SpecializationModel>()
             .ReverseMap();
         CreateMap<CreatedSpecializationModel, Specialization>().ReverseMap();

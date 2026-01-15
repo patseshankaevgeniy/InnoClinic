@@ -10,13 +10,11 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Specialization mappings
         CreateMap<SpecializationModel, SpecializationDto>()
             .ReverseMap();
         CreateMap<CreatedSpecializationDto, CreatedSpecializationModel>()
             .ReverseMap();
 
-        // Procedure mappings
         CreateMap<CreatedProcedureDto,CreatedProcedureModel>().ReverseMap();
         CreateMap<ProcedureDto,ProcedureModel>().ReverseMap();
         CreateMap<ProcedureDto,UpdatedProcedureModel>().ReverseMap();

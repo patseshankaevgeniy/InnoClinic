@@ -13,11 +13,9 @@ public static class BusinessLayerServiceRegister
     {
         services.RegisterDataLayerDependencies(configuration);
 
-        // Register BLL services
         services.AddScoped<ISpecializationsService, SpecializationsService>();
         services.AddScoped<IProceduresService, ProceduresService>();
 
-        // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
