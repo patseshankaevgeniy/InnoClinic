@@ -7,9 +7,9 @@ namespace Documents.DAL.Common.Interceptors;
 public class UpdateTimestampInterceptor(TimeProvider timeProvider) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
-     DbContextEventData eventData,
-     InterceptionResult<int> result,
-     CancellationToken cancellationToken = default)
+         DbContextEventData eventData,
+         InterceptionResult<int> result,
+         CancellationToken cancellationToken = default)
     {
         if (eventData.Context is null) return base.SavingChangesAsync(eventData, result, cancellationToken);
 
