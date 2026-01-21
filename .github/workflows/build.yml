@@ -42,26 +42,25 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          Write-Host "--- ДИАГНОСТИКА: ПРОВЕРКА ПУТЕЙ ---"
-          Write-Host "Текущая папка: $((Get-Location).Path)"
-          # Вывод дерева файлов, чтобы мы поняли, где лежат .sln
+          Write-Host "--- DEBUG: FOLDER STRUCTURE ---"
           Get-ChildItem -Recurse -Depth 3 | Where-Object { $_.PSIsContainer } | Select-Object FullName
           
-          Write-Host "--- ЗАПУСК SONARSCANNER ---"
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
+          Write-Host "--- START SONARSCANNER ---"
+          $scannerPath = "${{ runner.temp }}\scanner\dotnet-sonarscanner.exe"
+          & $scannerPath begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
 
-          Write-Host "--- ПОИСК И СБОРКА ПРОЕКТОВ ---"
+          Write-Host "--- SEARCHING FOR SOLUTIONS ---"
           $projects = Get-ChildItem -Filter *.sln -Recurse
           
           if ($null -eq $projects -or $projects.Count -eq 0) {
-              Write-Error "ОШИБКА: .sln файлы не найдены! Проверьте структуру папок в репозитории."
+              Write-Error "ERROR: No .sln files found in the repository!"
               exit 1
           }
 
           foreach ($sln in $projects) {
-              Write-Host "Собираю: $($sln.FullName)"
+              Write-Host "BUILDING: $($sln.FullName)"
               dotnet build "$($sln.FullName)" --configuration Release
           }
 
-          Write-Host "--- ЗАВЕРШЕНИЕ АНАЛИЗА ---"
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          Write-Host "--- END SONARSCANNER ---"
+          & $scannerPath end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
