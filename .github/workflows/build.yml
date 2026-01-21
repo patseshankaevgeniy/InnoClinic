@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/refactor-to-microservices # Добавили вашу новую ветку
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -23,16 +24,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Show file structure
-        run: Get-ChildItem -Recurse | Select-Object FullName
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.307
+          dotnet-version: 9.0.x
 
+      # Теперь ищем все .sln файлы в подпапках и восстанавливаем их
       - name: Restore dependencies
-        run: dotnet restore AuthorizationAPI/AuthorizationAPI/AuthorizationAPI.sln
+        run: |
+          dotnet restore InnoClinic.Authorization/InnoClinic.Authorization.sln
+          dotnet restore InnoClinic.Appointments/InnoClinic.Appointments.sln
+          dotnet restore InnoClinic.Documents/InnoClinic.Documents.sln
+          dotnet restore InnoClinic.Offices/InnoClinic.Offices.sln
+          dotnet restore InnoClinic.Profiles/InnoClinic.Profiles.sln
+          dotnet restore InnoClinic.Services/InnoClinic.Services.sln
+          dotnet restore InnoClinic.Gateway/InnoClinic.Gateway.sln
 
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
@@ -61,8 +67,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          # Начинаем анализ (ключ проекта остается прежним, Sonar соберет данные по всем билдам ниже)
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           
-          dotnet build AuthorizationAPI/AuthorizationAPI/AuthorizationAPI.sln --configuration Release --no-restore
+          # Собираем каждый солюшен по отдельности
+          dotnet build InnoClinic.Authorization/InnoClinic.Authorization.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Appointments/InnoClinic.Appointments.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Documents/InnoClinic.Documents.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Offices/InnoClinic.Offices.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Profiles/InnoClinic.Profiles.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Services/InnoClinic.Services.sln --configuration Release --no-restore
+          dotnet build InnoClinic.Gateway/InnoClinic.Gateway.sln --configuration Release --no-restore
           
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
