@@ -20,10 +20,6 @@ public class Program
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            if (!dbContext.Database.CanConnect())
-            {
-                throw new NotImplementedException("Database not connected");
-            }
         }
 
         // Configure the HTTP request pipeline.
