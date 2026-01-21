@@ -32,13 +32,13 @@ jobs:
       # Теперь ищем все .sln файлы в подпапках и восстанавливаем их
       - name: Restore dependencies
         run: |
-          dotnet restore InnoClinic.Authorization/InnoClinic.Authorization.sln
-          dotnet restore InnoClinic.Appointments/InnoClinic.Appointments.sln
-          dotnet restore InnoClinic.Documents/InnoClinic.Documents.sln
-          dotnet restore InnoClinic.Offices/InnoClinic.Offices.sln
-          dotnet restore InnoClinic.Profiles/InnoClinic.Profiles.sln
-          dotnet restore InnoClinic.Services/InnoClinic.Services.sln
-          dotnet restore InnoClinic.Gateway/InnoClinic.Gateway.sln
+          dotnet restore InnoClinic/InnoClinic.Authorization/InnoClinic.Authorization.sln
+          dotnet restore InnoClinic/InnoClinic.Appointments/InnoClinic.Appointments.sln
+          dotnet restore InnoClinic/InnoClinic.Documents/InnoClinic.Documents.sln
+          dotnet restore InnoClinic/InnoClinic.Offices/InnoClinic.Offices.sln
+          dotnet restore InnoClinic/InnoClinic.Profiles/InnoClinic.Profiles.sln
+          dotnet restore InnoClinic/InnoClinic.Services/InnoClinic.Services.sln
+          dotnet restore InnoClinic/InnoClinic.Gateway/InnoClinic.Gateway.sln
 
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
@@ -71,12 +71,12 @@ jobs:
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           
           # Собираем каждый солюшен по отдельности
-          dotnet build InnoClinic.Authorization/InnoClinic.Authorization.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Appointments/InnoClinic.Appointments.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Documents/InnoClinic.Documents.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Offices/InnoClinic.Offices.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Profiles/InnoClinic.Profiles.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Services/InnoClinic.Services.sln --configuration Release --no-restore
-          dotnet build InnoClinic.Gateway/InnoClinic.Gateway.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Authorization/InnoClinic.Authorization.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Appointments/InnoClinic.Appointments.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Documents/InnoClinic.Documents.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Offices/InnoClinic.Offices.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Profiles/InnoClinic.Profiles.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Services/InnoClinic.Services.sln --configuration Release --no-restore
+          dotnet build InnoClinic/InnoClinic.Gateway/InnoClinic.Gateway.sln --configuration Release --no-restore
           
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
