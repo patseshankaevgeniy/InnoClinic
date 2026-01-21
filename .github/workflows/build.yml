@@ -42,23 +42,22 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          Write-Host "--- DEBUG: FOLDER STRUCTURE ---"
-          Get-ChildItem -Recurse -Depth 3 | Where-Object { $_.PSIsContainer } | Select-Object FullName
-          
           Write-Host "--- START SONARSCANNER ---"
           $scannerPath = "${{ runner.temp }}\scanner\dotnet-sonarscanner.exe"
+          
           & $scannerPath begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
 
-          Write-Host "--- SEARCHING FOR SOLUTIONS ---"
-          $projects = Get-ChildItem -Filter *.sln -Recurse
+          Write-Host "--- SEARCHING FOR SOLUTIONS (.sln or .slnx) ---"
+          $projects = Get-ChildItem -Include *.sln, *.slnx -Recurse
           
           if ($null -eq $projects -or $projects.Count -eq 0) {
-              Write-Error "ERROR: No .sln files found in the repository!"
+              Write-Error "CRITICAL ERROR: No .sln or .slnx files found!"
               exit 1
           }
 
           foreach ($sln in $projects) {
               Write-Host "BUILDING: $($sln.FullName)"
+              # Сборка проекта
               dotnet build "$($sln.FullName)" --configuration Release
           }
 
