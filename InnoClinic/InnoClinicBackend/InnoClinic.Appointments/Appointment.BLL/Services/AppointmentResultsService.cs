@@ -15,14 +15,14 @@ public class AppointmentResultsService(IAppointmentResultsRepository repository,
         return mapper.Map<AppointmentResultModel>(entity);
     }
 
-    public async Task<AppointmentResultModel> CreateAsync(CreatedAppointmentResultModel createdModel, CancellationToken cancellationToken = default)
+    public async Task<AppointmentResultModel> CreateAsync(CreatedAppointmentResultModel createdModel, CancellationToken cancellationToken)
     {
         var newEntity = await repository.CreateAsync(mapper.Map<AppointmentResultEntity>(createdModel), cancellationToken);
 
         return mapper.Map<AppointmentResultModel>(newEntity);
     }
 
-    public async Task<IReadOnlyCollection<AppointmentResultModel>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<AppointmentResultModel>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await repository.GetAllAsync(cancellationToken: cancellationToken)
             .ContinueWith(task => mapper.Map<List<AppointmentResultModel>>(task.Result), cancellationToken);
@@ -35,13 +35,13 @@ public class AppointmentResultsService(IAppointmentResultsRepository repository,
         return mapper.Map<List<AppointmentResultModel>>(entities);
     }
 
-    public async Task<AppointmentResultModel> UpdateAsync(UpdatedAppointmentResultModel updatedModel, CancellationToken cancellationToken = default)
+    public async Task<AppointmentResultModel> UpdateAsync(UpdatedAppointmentResultModel updatedModel, CancellationToken cancellationToken)
     {
         var updatedEntity = await repository.UpdateAsync(mapper.Map<AppointmentResultEntity>(updatedModel), cancellationToken);
         return mapper.Map<AppointmentResultModel>(updatedEntity);
     }
 
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var deletedEntity = await repository.GetByIdAsync(id, cancellationToken: cancellationToken);
         await repository.DeleteAsync(deletedEntity, cancellationToken);
