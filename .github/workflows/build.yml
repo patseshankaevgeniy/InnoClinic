@@ -24,23 +24,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Show file structure
-        shell: powershell
-        run: Get-ChildItem -Recurse | Select-Object FullName
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-
-      - name: Restore dependencies
-        shell: powershell
-        run: |
-          $slnFiles = Get-ChildItem -Path "InnoClinic/InnoClinicBackend" -Filter *.sln -Recurse
-          foreach ($file in $slnFiles) {
-              Write-Host "Restoring: $($file.FullName)"
-              dotnet restore $file.FullName
-          }
 
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
@@ -69,12 +56,27 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-            
-          $slnFiles = Get-ChildItem -Path "InnoClinic/InnoClinicBackend" -Filter *.sln -Recurse
-          foreach ($file in $slnFiles) {
-              Write-Host "Building: $($file.FullName)"
-              dotnet build $file.FullName --configuration Release --no-restore
+          # 1. Запуск сканера
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin `
+            /k:"patseshankaevgeniy_InnoClinic" `
+            /o:"patseshankaevgeniy" `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
+            /d:sonar.host.url="https://sonarcloud.io" `
+            /d:sonar.scanner.skipJreProvisioning=true
+
+          # 2. Поиск и сборка всех солюшенов
+          # Ищем рекурсивно все .sln файлы, исключая старые, если они остались
+          $projects = Get-ChildItem -Filter *.sln -Recurse | Where-Object { $_.FullName -notmatch "obj" -and $_.FullName -notmatch "bin" }
+
+          if ($null -eq $projects -or $projects.Count -eq 0) {
+              Write-Error "Критическая ошибка: Файлы решений (.sln) не найдены в репозитории!"
+              exit 1
           }
-          
+
+          foreach ($sln in $projects) {
+              Write-Host "--- Начинаю сборку: $($sln.FullName) ---"
+              dotnet build "$($sln.FullName)" --configuration Release
+          }
+
+          # 3. Финализация анализа
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
