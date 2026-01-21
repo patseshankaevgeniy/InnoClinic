@@ -35,43 +35,33 @@ jobs:
           if (!(Test-Path "${{ runner.temp }}\scanner")) {
             New-Item -Path "${{ runner.temp }}\scanner" -ItemType Directory
           }
-          dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
+          dotnet tool update dotnet-sonarscanner --tool-path "${{ runner.temp }}\scanner"
 
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          # 1. ДИАГНОСТИКА: Посмотрим, что вообще скачалось в раннер
-          Write-Host "--- ТЕКУЩАЯ ДИРЕКТОРИЯ ---"
-          Get-Location
-          Write-Host "--- ДЕРЕВО ФАЙЛОВ (первые 2 уровня) ---"
-          Get-ChildItem -Recurse -Depth 2 | Select-Object FullName
+          Write-Host "--- ДИАГНОСТИКА: ПРОВЕРКА ПУТЕЙ ---"
+          Write-Host "Текущая папка: $((Get-Location).Path)"
+          # Вывод дерева файлов, чтобы мы поняли, где лежат .sln
+          Get-ChildItem -Recurse -Depth 3 | Where-Object { $_.PSIsContainer } | Select-Object FullName
           
-          # 2. Начало анализа
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin `
-            /k:"patseshankaevgeniy_InnoClinic" `
-            /o:"patseshankaevgeniy" `
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-            /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.scanner.skipJreProvisioning=true
+          Write-Host "--- ЗАПУСК SONARSCANNER ---"
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
 
-          # 3. ПОИСК .sln (пробуем найти вообще везде)
-          $projects = Get-ChildItem -Path $PSScriptRoot -Filter *.sln -Recurse
+          Write-Host "--- ПОИСК И СБОРКА ПРОЕКТОВ ---"
+          $projects = Get-ChildItem -Filter *.sln -Recurse
           
           if ($null -eq $projects -or $projects.Count -eq 0) {
-              # Если не нашли по $PSScriptRoot, ищем от корня диска D (где работает GitHub)
-              $projects = Get-ChildItem -Filter *.sln -Recurse
-          }
-
-          if ($null -eq $projects -or $projects.Count -eq 0) {
-              Write-Error "SLN файлы всё еще не найдены! Посмотри лог 'ДЕРЕВО ФАЙЛОВ' выше."
+              Write-Error "ОШИБКА: .sln файлы не найдены! Проверьте структуру папок в репозитории."
               exit 1
           }
 
           foreach ($sln in $projects) {
-              Write-Host "--- Сборка: $($sln.FullName) ---"
+              Write-Host "Собираю: $($sln.FullName)"
               dotnet build "$($sln.FullName)" --configuration Release
           }
 
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          Write-Host "--- ЗАВЕРШЕНИЕ АНАЛИЗА ---"
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
