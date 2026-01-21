@@ -9,5 +9,5 @@ public interface IAppointmentResultsService
     Task<IReadOnlyCollection<AppointmentResultModel>> GetByDateAsync(DateTime filterDate, CancellationToken cancellationToken, bool isDescending = false);
     Task<AppointmentResultModel> CreateAsync(CreatedAppointmentResultModel createdModel, CancellationToken cancellationToken);
     Task<AppointmentResultModel> UpdateAsync(UpdatedAppointmentResultModel updatedModel, CancellationToken cancellationToken);
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

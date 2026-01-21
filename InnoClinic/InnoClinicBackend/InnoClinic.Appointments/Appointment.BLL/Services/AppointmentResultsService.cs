@@ -43,7 +43,7 @@ public class AppointmentResultsService(IAppointmentResultsRepository repository,
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var deletedEntity = await repository.GetByIdAsync(id, cancellationToken: cancellationToken);
-        await repository.DeleteAsync(deletedEntity, cancellationToken);
+        var entity = await repository.GetByIdAsync(id, cancellationToken: cancellationToken);
+        await repository.DeleteAsync(entity, cancellationToken);
     }
 }
