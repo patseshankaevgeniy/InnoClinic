@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Offices.API/Offices.API.csproj" />
+  <Project Path="Offices.BLL/Offices.BLL.csproj" />
+  <Project Path="Offices.DAL/Offices.DAL.csproj" />
+</Solution>

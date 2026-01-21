@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Appointment.API/Appointment.API.csproj" />
+  <Project Path="Appointment.BLL/Appointment.BLL.csproj" />
+  <Project Path="Appointment.DAL/Appointment.DAL.csproj" />
+</Solution>
