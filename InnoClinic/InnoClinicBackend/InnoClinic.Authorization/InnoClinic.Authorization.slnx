@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Authorization.API/Authorization.API.csproj" />
+  <Project Path="Authorization.BLL/Authorization.BLL.csproj" />
+  <Project Path="Authorization.DAL/Authorization.DAL.csproj" />
+</Solution>

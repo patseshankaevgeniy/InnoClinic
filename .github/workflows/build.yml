@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/refactor-to-microservices
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -23,46 +24,42 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Show file structure
-        run: Get-ChildItem -Recurse | Select-Object FullName
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.307
-
-      - name: Restore dependencies
-        run: dotnet restore AuthorizationAPI/AuthorizationAPI/AuthorizationAPI.sln
-
-      - name: Cache SonarQube Cloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache SonarQube Cloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v4
-        with:
-          path: ${{ runner.temp }}\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
+          dotnet-version: 9.0.x
 
       - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          New-Item -Path ${{ runner.temp }}\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
+          if (!(Test-Path "${{ runner.temp }}\scanner")) {
+            New-Item -Path "${{ runner.temp }}\scanner" -ItemType Directory
+          }
+          dotnet tool update dotnet-sonarscanner --tool-path "${{ runner.temp }}\scanner"
 
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          Write-Host "--- START SONARSCANNER ---"
+          $scannerPath = "${{ runner.temp }}\scanner\dotnet-sonarscanner.exe"
           
-          dotnet build AuthorizationAPI/AuthorizationAPI/AuthorizationAPI.sln --configuration Release --no-restore
+          & $scannerPath begin /k:"patseshankaevgeniy_InnoClinic" /o:"patseshankaevgeniy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
+
+          Write-Host "--- SEARCHING FOR SOLUTIONS (.sln or .slnx) ---"
+          $projects = Get-ChildItem -Include *.sln, *.slnx -Recurse
           
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          if ($null -eq $projects -or $projects.Count -eq 0) {
+              Write-Error "CRITICAL ERROR: No .sln or .slnx files found!"
+              exit 1
+          }
+
+          foreach ($sln in $projects) {
+              Write-Host "BUILDING: $($sln.FullName)"
+              # Сборка проекта
+              dotnet build "$($sln.FullName)" --configuration Release
+          }
+
+          Write-Host "--- END SONARSCANNER ---"
+          & $scannerPath end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
