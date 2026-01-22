@@ -1,9 +1,11 @@
-﻿using Profiles.DAL.Models.Enums;
-
-namespace Profiles.BLL.Models.Doctors;
+﻿namespace Profiles.BLL.Models.Doctors;
 
 public sealed class CreatedDoctorModel : UserModel
 {
-    public DoctorStatus Status { get; set; }
-    public DateTime CareerStartAt { get; set; }
+    public required Guid OfficeId { get; set; }
+    public required Guid SpecializationId { get; set; }
+    public required DateTime CareerStartAt { get; set; }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
+    public Guid? PhotoId { get; set; }
 }

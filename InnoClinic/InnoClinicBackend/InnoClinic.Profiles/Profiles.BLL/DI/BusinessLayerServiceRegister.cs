@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using InnoClinic.Contracts.Grpc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profiles.BLL.Services;
 using Profiles.BLL.Services.Interfaces;
@@ -13,12 +14,20 @@ public static class BusinessLayerServiceRegister
     {
         services.RegisterDataLayerDependencies(configuration);
 
-        // Register BLL services
+        services.AddGrpcClient<EntityChecker.EntityCheckerClient>("OfficeClient", o =>
+        {
+            o.Address = new Uri(configuration["GrpcServices:OfficesService"]!);
+        });
+
+        services.AddGrpcClient<EntityChecker.EntityCheckerClient>("SpecializationClient", o =>
+        {
+            o.Address = new Uri(configuration["GrpcServices:SpecializationsService"]!);
+        });
+
         services.AddScoped<IDoctorsService, DoctorsService>();
         services.AddScoped<IPatientService, PatientService>();
         services.AddScoped<IReceptionistsService, ReceptionistsService>();
 
-        // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;

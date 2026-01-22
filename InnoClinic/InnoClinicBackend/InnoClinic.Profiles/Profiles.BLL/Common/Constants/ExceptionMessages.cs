@@ -1,6 +1,6 @@
 ﻿namespace Profiles.BLL.Common.Constants;
 
-public static class ExceptionConstants
+public static class ExceptionMessages
 {
     // Doctors
     public const string DoctorAlreadyExists = "Doctor with that name already exists.";
@@ -13,4 +13,7 @@ public static class ExceptionConstants
     // Receptionists
     public const string ReceptionistAlreadyExists = "Receptionist with that name already exists.";
     public const string NotFoundReceptionist = "There is no such receptionist with that id";
+
+    public const string NotFoundOffice = "Office not found";
+    public const string NotFoundSpecialization = "Specialization not found";
 }
