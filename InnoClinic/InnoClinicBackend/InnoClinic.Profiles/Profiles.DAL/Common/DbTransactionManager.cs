@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Profiles.DAL.Uow;
+namespace Profiles.DAL.Common;
 
-public class UnitOfWork(ProfilesDbContext dbContext) : IUnitOfWork
+public class DbTransactionManager(ProfilesDbContext dbContext) : IDbTransactionManager
 {
     private IDbContextTransaction? _currentTransaction;
 

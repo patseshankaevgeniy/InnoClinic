@@ -8,10 +8,10 @@ using Profiles.BLL.Common.Exceptions;
 using Profiles.BLL.Models;
 using Profiles.BLL.Models.Doctors;
 using Profiles.BLL.Services.Interfaces;
+using Profiles.DAL.Common;
 using Profiles.DAL.Entities;
 using Profiles.DAL.Models;
 using Profiles.DAL.Repositories.Interfaces;
-using Profiles.DAL.Uow;
 
 namespace Profiles.BLL.Services;
 
@@ -20,13 +20,13 @@ public class DoctorsService(
     GrpcClientFactory grpcClientFactory,
     IPublishEndpoint publishEndpoint,
     IMapper mapper,
-    IUnitOfWork unitOfWork) : IDoctorsService
+    IDbTransactionManager unitOfWork) : IDoctorsService
 {
     private readonly EntityChecker.EntityCheckerClient _officeClient =
-    grpcClientFactory.CreateClient<EntityChecker.EntityCheckerClient>("OfficeClient");
+        grpcClientFactory.CreateClient<EntityChecker.EntityCheckerClient>("OfficeClient");
 
     private readonly EntityChecker.EntityCheckerClient _specializationClient =
-         grpcClientFactory.CreateClient<EntityChecker.EntityCheckerClient>("SpecializationClient");
+        grpcClientFactory.CreateClient<EntityChecker.EntityCheckerClient>("SpecializationClient");
 
     public async Task<DoctorModel> CreateAsync(CreatedDoctorModel createdModel, CancellationToken cancellationToken)
     {

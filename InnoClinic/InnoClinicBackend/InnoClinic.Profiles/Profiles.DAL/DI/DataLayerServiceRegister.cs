@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Profiles.DAL.Common;
 using Profiles.DAL.Repositories;
 using Profiles.DAL.Repositories.Interfaces;
-using Profiles.DAL.Uow;
 
 namespace Profiles.DAL.DI;
 
@@ -38,7 +38,7 @@ public static class DataLayerServiceRegister
             });
         });
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IDbTransactionManager, DbTransactionManager>();
         services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
     }
 }

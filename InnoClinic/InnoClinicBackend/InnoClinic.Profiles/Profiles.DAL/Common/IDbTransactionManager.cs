@@ -1,6 +1,6 @@
-﻿namespace Profiles.DAL.Uow;
+﻿namespace Profiles.DAL.Common;
 
-public interface IUnitOfWork : IDisposable
+public interface IDbTransactionManager : IDisposable
 {
     Task BeginTransactionAsync(CancellationToken cancellationToken);
     Task CommitAsync(CancellationToken cancellationToken);
