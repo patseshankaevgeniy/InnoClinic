@@ -47,7 +47,7 @@ public class PatientService(IGenericRepository<Patient> patientRepository, IMapp
         var patient = await patientRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
         if (patient is null)
         {
-            throw new NotFoundException(ExceptionConstants.NotFoundPatient);
+            throw new NotFoundException(ExceptionMessages.NotFoundPatient);
         }
         return patient;
     }

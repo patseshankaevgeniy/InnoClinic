@@ -19,7 +19,6 @@ public sealed class MappingProfile : Profile
             .ForMember(x => x.Status, o => o.MapFrom(d => d.Status.ToString()))
             .ReverseMap();
         CreateMap<CreatedDoctorModel, CreatedDoctorDto>()
-            .ForMember(x => x.Status, o => o.MapFrom(d => d.Status.ToString()))
             .ReverseMap();
         CreateMap<UpdatedDoctorModel, UpdatedDoctorDto>()
             .ForMember(x => x.Status, o => o.MapFrom(d => d.Status.ToString()))
