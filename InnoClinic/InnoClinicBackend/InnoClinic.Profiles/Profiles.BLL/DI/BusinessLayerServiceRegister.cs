@@ -16,12 +16,12 @@ public static class BusinessLayerServiceRegister
 
         services.AddGrpcClient<EntityChecker.EntityCheckerClient>("OfficeClient", o =>
         {
-            o.Address = new Uri(configuration["GrpcServices:OfficesService"]!);
+            o.Address = new Uri(configuration["ConnectionStrings:OfficesService"]!);
         });
 
         services.AddGrpcClient<EntityChecker.EntityCheckerClient>("SpecializationClient", o =>
         {
-            o.Address = new Uri(configuration["GrpcServices:SpecializationsService"]!);
+            o.Address = new Uri(configuration["ConnectionStrings:SpecializationsService"]!);
         });
 
         services.AddScoped<IDoctorsService, DoctorsService>();

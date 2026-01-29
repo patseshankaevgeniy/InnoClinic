@@ -20,7 +20,7 @@ public class DoctorsService(
     GrpcClientFactory grpcClientFactory,
     IPublishEndpoint publishEndpoint,
     IMapper mapper,
-    IDbTransactionManager unitOfWork) : IDoctorsService
+    IDbTransactionManager transactionManager) : IDoctorsService
 {
     private readonly EntityChecker.EntityCheckerClient _officeClient =
         grpcClientFactory.CreateClient<EntityChecker.EntityCheckerClient>("OfficeClient");
@@ -34,7 +34,7 @@ public class DoctorsService(
             EnsureEntityExistsAsync(_officeClient, createdModel.OfficeId, ExceptionMessages.NotFoundOffice, cancellationToken),
             EnsureEntityExistsAsync(_specializationClient, createdModel.SpecializationId, ExceptionMessages.NotFoundSpecialization, cancellationToken));
 
-        await unitOfWork.BeginTransactionAsync(cancellationToken);
+        await transactionManager.BeginTransactionAsync(cancellationToken);
 
         try
         {
@@ -43,20 +43,20 @@ public class DoctorsService(
             newDoctor = await doctorRepository.CreateAsync(newDoctor, cancellationToken);
 
             await publishEndpoint.Publish<UserCreatedEvent>(new
-                {
-                    UserId = newDoctor.Id,
-                    Email = createdModel.Email!,
-                    Password = createdModel.Password!,
-                    Role = "Doctor"
-                }, cancellationToken);
+            {
+                UserId = newDoctor.Id,
+                Email = createdModel.Email!,
+                Password = createdModel.Password!,
+                Role = "Doctor"
+            }, cancellationToken);
 
-            await unitOfWork.CommitAsync(cancellationToken);
+            await transactionManager.CommitAsync(cancellationToken);
 
             return mapper.Map<DoctorModel>(newDoctor);
         }
         catch
         {
-            await unitOfWork.RollbackAsync(cancellationToken);
+            await transactionManager.RollbackAsync(cancellationToken);
             throw;
         }
     }

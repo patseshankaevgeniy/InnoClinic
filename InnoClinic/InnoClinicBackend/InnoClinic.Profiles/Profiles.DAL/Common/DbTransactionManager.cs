@@ -12,12 +12,18 @@ public class DbTransactionManager(ProfilesDbContext dbContext) : IDbTransactionM
     public async Task CommitAsync(CancellationToken cancellationToken)
     {
         await dbContext.SaveChangesAsync(cancellationToken);
-        if (_currentTransaction != null) await _currentTransaction.CommitAsync(cancellationToken);
+        if (_currentTransaction != null)
+        {
+            await _currentTransaction.CommitAsync(cancellationToken);
+        }
     }
 
     public async Task RollbackAsync(CancellationToken cancellationToken)
     {
-        if (_currentTransaction != null) await _currentTransaction.RollbackAsync(cancellationToken);
+        if (_currentTransaction != null)
+        {
+            await _currentTransaction.RollbackAsync(cancellationToken);
+        }
     }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken) =>
