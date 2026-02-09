@@ -2,16 +2,34 @@
 using Appointment.BLL.Models.Appointments;
 using Appointment.BLL.Services.Interfaces;
 using Appointment.DAL.Entities;
+using Appointment.DAL.Enums;
 using Appointment.DAL.Repositories.Interfaces;
 using AutoMapper;
+using InnoClinic.Contracts.Events;
+using MassTransit;
 
 namespace Appointment.BLL.Services;
 
-public class AppointmentsService(IAppointmentsRepository appointmentsRepository, IMapper mapper) : IAppointmentsService
+public class AppointmentsService(
+    IAppointmentsRepository appointmentsRepository,
+    IPublishEndpoint publishEndpoint,
+    IMapper mapper) : IAppointmentsService
 {
     public async Task<AppointmentModel> CreateAsync(CreatedAppointmentModel createdModel, CancellationToken cancellationToken = default)
     {
-        var createdAppointment = await appointmentsRepository.CreateAsync(mapper.Map<AppointmentEntity>(createdModel), cancellationToken);
+        var createdAppointment = mapper.Map<AppointmentEntity>(createdModel);
+
+        createdAppointment.Status = AppointmentStatus.AwaitingApproval;
+
+        createdAppointment = await appointmentsRepository.CreateAsync(createdAppointment, cancellationToken);
+
+        await publishEndpoint.Publish(new AppointmentCreatedEvent
+        {
+            AppointmentId = createdAppointment.Id,
+            OfficeId = createdModel.OfficeId,
+            DoctorId = createdModel.DoctorId,
+            DateTime = createdModel.AppointmentDate
+        });
 
         return mapper.Map<AppointmentModel>(createdAppointment);
     }

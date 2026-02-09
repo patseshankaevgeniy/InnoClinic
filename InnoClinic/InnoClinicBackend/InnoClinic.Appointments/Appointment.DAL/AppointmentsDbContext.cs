@@ -17,5 +17,8 @@ public class AppointmentsDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppointmentsDbContext).Assembly);
+
+        modelBuilder.Entity<AppointmentEntity>()
+            .HasIndex(a => new { a.DoctorId, a.AppointmentDate });
     }
 }

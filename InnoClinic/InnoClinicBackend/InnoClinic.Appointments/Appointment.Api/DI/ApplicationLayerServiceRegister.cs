@@ -1,6 +1,7 @@
 ﻿using Appointment.BLL.DI;
-using System.Reflection;
+using MassTransit;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Appointment.Api.DI;
 
@@ -12,6 +13,22 @@ public static class ApplicationLayerServiceRegister
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .RegisterBusinessLayerDependencies(configuration)
                 .AddHttpContextAccessor();
+
+        services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                var rabbitSettings = configuration.GetSection("RabbitMq");
+
+                cfg.Host(rabbitSettings["Host"]!, "/", h =>
+                {
+                    h.Username(rabbitSettings["Username"]!);
+                    h.Password(rabbitSettings["Password"]!);
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
 
         services.AddSwaggerGen(options =>
         {

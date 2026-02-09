@@ -1,6 +1,7 @@
 ﻿using Appointment.BLL.Services;
 using Appointment.BLL.Services.Interfaces;
 using Appointment.DAL.DI;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -15,6 +16,11 @@ public static class BusinessLayerServiceRegister
 
         // Register BLL services
         services.AddScoped<IAppointmentsService, AppointmentsService>();
+
+        services.AddMassTransit(x =>
+        {
+
+        });
 
         // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
