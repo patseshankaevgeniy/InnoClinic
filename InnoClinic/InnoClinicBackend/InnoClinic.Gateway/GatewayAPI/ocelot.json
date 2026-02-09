@@ -13,7 +13,7 @@
       "UpstreamPathTemplate": "/services/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "Auth0Scheme",
         "AllowedScopes": []
       },
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -31,7 +31,7 @@
       "UpstreamPathTemplate": "/offices/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "Auth0Scheme",
         "AllowedScopes": []
       },
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -50,7 +50,7 @@
       "UpstreamPathTemplate": "/profiles/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "Auth0Scheme",
         "AllowedScopes": []
       },
       "DangerousAcceptAnyServerCertificateValidator": true

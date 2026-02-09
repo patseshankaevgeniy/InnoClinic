@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Profiles.DAL.Entities;
 
 namespace Profiles.DAL
@@ -17,6 +18,7 @@ namespace Profiles.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.AddTransactionalOutboxEntities();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProfilesDbContext).Assembly);
         }
     }
