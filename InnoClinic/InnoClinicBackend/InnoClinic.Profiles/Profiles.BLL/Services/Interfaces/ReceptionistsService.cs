@@ -46,7 +46,7 @@ public class ReceptionistsService(IGenericRepository<Receptionist> receptionists
         var receptionist = await receptionistsRepository.GetByPredicateAsync(x => x.Id == id, cancellationToken: cancellationToken);
         if (receptionist is null)
         {
-            throw new NotFoundException(ExceptionConstants.NotFoundReceptionist);
+            throw new NotFoundException(ExceptionMessages.NotFoundReceptionist);
         }
         return receptionist;
     }
