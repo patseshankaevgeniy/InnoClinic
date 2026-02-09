@@ -1,4 +1,5 @@
 using Appointment.Api.DI;
+using Appointment.API.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.ApplyMigrations();
 
 if (app.Environment.IsDevelopment())
 {
