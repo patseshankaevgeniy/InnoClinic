@@ -1,4 +1,5 @@
 using Appointment.Api.DI;
+using Appointment.API.Common.Extensions;
 using Appointment.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,23 +11,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<AppointmentsDbContext>();
-        if (context.Database.GetPendingMigrations().Any())
-        {
-            context.Database.Migrate();
-        }
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error while rolling out migrations.");
-    }
-}
+app.ApplyMigrations();
 
 if (app.Environment.IsDevelopment())
 {

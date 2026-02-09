@@ -14,15 +14,8 @@ public static class BusinessLayerServiceRegister
     {
         services.RegisterDataLayerDependencies(configuration);
 
-        // Register BLL services
         services.AddScoped<IAppointmentsService, AppointmentsService>();
 
-        services.AddMassTransit(x =>
-        {
-
-        });
-
-        // Register AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
