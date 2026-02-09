@@ -1,7 +1,5 @@
 using Appointment.Api.DI;
 using Appointment.API.Common.Extensions;
-using Appointment.DAL;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
