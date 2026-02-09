@@ -5,14 +5,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace GatewayAPI.Consumers;
 
-public class AppointmentCreatedConsumer : IConsumer<AppointmentCreatedEvent>
+public class AppointmentCreatedConsumer(IHubContext<NotificationHub> hubContext) : IConsumer<AppointmentCreatedEvent>
 {
-    private readonly IHubContext<NotificationHub> _hubContext;
-
-    public AppointmentCreatedConsumer(IHubContext<NotificationHub> hubContext)
-    {
-        _hubContext = hubContext;
-    }
+    private readonly IHubContext<NotificationHub> _hubContext = hubContext;
 
     public async Task Consume(ConsumeContext<AppointmentCreatedEvent> context)
     {
